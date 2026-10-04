@@ -5,7 +5,7 @@
 | Version | 0.1 (draft) |
 | Date | 2026-10-04 |
 | Platform | Apple Watch, watchOS 26 and later, no iPhone app |
-| Mockup | [Figma — Horizon, alarme soleil Apple Watch](https://www.figma.com/design/nXHuIYGEzWP8qFg8I6el40) (sections 0 to 8) |
+| Mockup | [`mockup/`](mockup/) — one image per design section, 0 to 8 |
 | UI strings | [`strings.csv`](strings.csv) — every string in 12 locales |
 | Test data | [`fixtures/sun-times.csv`](fixtures/sun-times.csv) |
 
@@ -27,6 +27,8 @@ Horizon is an Apple Watch app that rings at **sunrise** and at **sunset**, every
 ### Who it's for
 
 People who live by daylight: hikers, sailors, photographers, runners, people who fast or pray at sunrise and sunset, or anyone who wants a nudge to go outside before dark.
+
+![Overview](mockup/0-overview.png)
 
 ---
 
@@ -121,7 +123,7 @@ A real alarm that keeps vibrating until stopped. Available for the **next** enab
   - **Signature** vibration: `.directionUp` repeated for sunrise, `.directionDown` for sunset, so the user knows which one it is without looking.
   - **Standard**: `.notification`.
 - If the app is not in the foreground, watchOS shows its own alarm alert with **Stop** and **Open**. Open launches the app, which arms the next occurrence. Stop leaves the next occurrence in automatic mode.
-- If the app is in the foreground, it shows the full-screen alarm (section 5.6). Its **Stop** button invalidates the session and immediately arms the next occurrence.
+- If the app is in the foreground, it shows the full-screen alarm (section 5.4). Its **Stop** button invalidates the session and immediately arms the next occurrence.
 - **Double tap** (thumb and index finger) triggers Stop (`.handGestureShortcut(.primaryAction)`).
 - The **ring around a bell** on the main screen means "this occurrence is armed as a persistent alarm".
 
@@ -133,25 +135,29 @@ Apple documents the smart alarm session for waking users. In the review notes, e
 
 ## 5. Screens
 
-Section numbers refer to the Figma mockup. Times in examples are Paris, 29 September 2026: sunrise 07:47, sunset 19:33.
+Each part links to its image in [`mockup/`](mockup/). Times in examples are Paris, 29 September 2026: sunrise 07:47, sunset 19:33.
 
-### 5.1 Main screen — the sun's arc (Figma §1)
+### 5.1 Main screen — the sun's arc
+
+![Main screen](mockup/1-main-screen.png)
 
 - **Title bar**: "Horizon" and the time.
-- **Arc**: a half-ellipse above a horizon line. The left end is sunrise, the right end sunset (mirrored in right-to-left languages, see §8). The part already travelled is drawn as a gradient (dawn orange to dusk pink), the rest dotted.
+- **Arc**: a half-ellipse above a horizon line. The left end is sunrise, the right end sunset (mirrored in right-to-left languages, see section 8). The part already travelled is drawn as a gradient (dawn orange to dusk pink), the rest dotted.
 - **Sun**: placed on the arc at the fraction of daylight already elapsed, `(now − sunrise) / (sunset − sunrise)`, with a soft glow.
 - **Two bells (nodes)** on the horizon, at the arc ends:
   - on: filled gradient bell, glow;
   - off: dark circle, crossed-out bell;
   - ring around it: armed as a persistent alarm.
-  - **Tap** toggles the alarm, plays a `.click` haptic, shows a 2 s confirmation ("Sunrise alarm on — Every day, automatically") and replans the alarms.
+  - **Tap** toggles the alarm, plays a `.click` haptic, shows a 2 s confirmation ("Sunrise alarm on — Every day, on its own") and replans the alarms.
 - **Countdown** inside the arc (see 5.2).
 - Under the horizon: day length ("11 h 46 of daylight"), then the sunrise and sunset labels and times.
 - **Bottom pill**: mode of the next alarm, "Persistent alarm", "Automatic alarm", or "Tap a bell" when both are off.
 - **Night view** (after sunset, until sunrise): dotted indigo arc, moon at the top, tomorrow's times, "Tomorrow · 11 h 43".
 - Page indicator on the right, next to the Digital Crown (3 pages).
 
-### 5.2 Countdown (Figma §2)
+### 5.2 Countdown
+
+![Countdown](mockup/2-countdown.png)
 
 | Situation | Display |
 |---|---|
@@ -163,13 +169,17 @@ Section numbers refer to the Figma mockup. Times in examples are Paris, 29 Septe
 
 Live values use `Text(timerInterval:countsDown:)`, so the system updates them without app code running every second.
 
-### 5.3 7-day page (Figma §3)
+### 5.3 7-day page, settings and location
+
+![Navigation and settings](mockup/3-navigation-settings.png)
+
+#### 7-day page
 
 - Second page (Digital Crown). Today plus 6 days: weekday, sunrise time, sunset time.
 - Times of disabled alarms are dimmed. A **long press** on a time offers "Skip this day" / "Restore".
 - Tapping a day shows that day on the arc.
 
-### 5.4 Settings (Figma §3)
+#### Settings
 
 Third page.
 
@@ -178,24 +188,30 @@ Third page.
 | Sunrise | toggle, subtitle "07:47 · every day" |
 | Sunset | toggle, subtitle "19:33 · every day" |
 | Follow-up | Off, 2 min (default), 5 min |
-| Location | opens 5.5, shows the city |
+| Location | opens the Location screen below, shows the city |
 | Vibration | Signature (default), Standard |
 
 The two toggles mirror the bells on the arc.
 
-### 5.5 Location (Figma §3)
+#### Location
 
 City name, coordinates, status chip ("GPS · 12 min ago" or "Last known position"), **Refresh** button, "No data leaves your watch". If location is denied: message and **Choose a city** (offline list).
 
-### 5.6 In-app alarm screen (Figma §4)
+### 5.4 Alarm screens and notifications
+
+![Alarms and notifications](mockup/4-alarms-notifications.png)
+
+#### In-app alarm screen
 
 Full screen in dusk (sunset) or dawn (sunrise) colours, sun on the horizon with an arrow down or up, title "Sunset" / "Sunrise", "19:33 · Paris", big **Stop** button. Stop is also triggered by double tap.
 
-### 5.7 Notifications (Figma §4)
+#### Notifications
 
 See 4.2. Title, body, a tinted band with the next event, actions **Got it** and Dismiss.
 
-### 5.8 Onboarding (Figma §5)
+### 5.5 Onboarding
+
+![First launch](mockup/5-first-launch.png)
 
 Four screens, under 20 seconds, no account:
 
@@ -220,7 +236,11 @@ Four screens, under 20 seconds, no account:
 
 ---
 
-## 7. Widgets, complications and control (Figma §6 and §7)
+## 7. Widgets, complications and control
+
+![Watch face, widgets and control](mockup/6-watch-face-widgets.png)
+
+![Corner complications](mockup/7-corner-complications.png)
 
 One widget extension (WidgetKit). Every widget opens the app on tap (`widgetURL`), which arms the next persistent alarm.
 
@@ -242,6 +262,8 @@ One widget extension (WidgetKit). Every widget opens the app on tap (`widgetURL`
 ---
 
 ## 8. Localization
+
+![Languages](mockup/8-languages.png)
 
 ### 8.1 Languages at launch
 

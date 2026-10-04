@@ -20,7 +20,11 @@ An Apple Watch app that rings at **sunrise** and **sunset**, every day, at the s
 | [Specification](docs/SPEC.md) | Behaviour of every screen, alarms, sun calculation, widgets, localization, privacy, architecture, tests, distribution |
 | [UI strings](docs/strings.csv) | Every string in en, fr, es, es-419, pt-PT, pt-BR, it, nl, de, ja, zh-Hans, ar (first translation, to be reviewed by native speakers) |
 | [Sun time fixtures](docs/fixtures/sun-times.csv) | Reference sunrise and sunset times for unit tests, including polar and daylight-saving cases |
-| [Mockup (Figma)](https://www.figma.com/design/nXHuIYGEzWP8qFg8I6el40) | Every screen, the countdown, alarms, onboarding, complications, languages |
+| [Mockup](docs/mockup/) | One image per design section: main screen, countdown, navigation and settings, alarms, onboarding, complications, languages |
+
+The images in `docs/mockup/` are exported from the design source, a private Figma file kept by TRENDev. Re-export them whenever the design changes.
+
+![Horizon overview](docs/mockup/0-overview.png)
 
 ## Requirements
 
