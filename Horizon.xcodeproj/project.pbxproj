@@ -109,12 +109,12 @@
 		D9CE323CFF2F6939E42873D1 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
 		DAE18DB0C3EBD04B7EE01FC4 /* DebugOverrides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugOverrides.swift; sourceTree = "<group>"; };
 		E002162C4CF2A42D1B003F59 /* HorizonWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HorizonWidgets.entitlements; sourceTree = "<group>"; };
+		F13C67079F18F2C145C3C97B /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		F2138569790A86D8521C748D /* SunArcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunArcView.swift; sourceTree = "<group>"; };
 		F6E6A03BF690609D4315D69A /* HorizonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizonApp.swift; sourceTree = "<group>"; };
 		F8E7191B980D0E8899E8C175 /* Horizon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Horizon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD6F56F11104566D9DAA7841 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		FFB19AC5F492F9BC07528D5F /* CityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPickerView.swift; sourceTree = "<group>"; };
-		"TEMP_524D445A-BCB3-4FDF-A17D-097BE0437F54" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +168,7 @@
 		55FC6F72DEDDC0F025E4BF68 = {
 			isa = PBXGroup;
 			children = (
+				94788C5ADC3AD6CD57AFC59B /* Configuration */,
 				2924AEB0014AFFAE4CC50891 /* HorizonApp */,
 				FF88A0BDC02C2C3663652E4A /* HorizonUITests */,
 				BDC1D29F127E54BF6AA7C2CB /* HorizonWidgets */,
@@ -211,6 +212,14 @@
 				D9CE323CFF2F6939E42873D1 /* WeekView.swift */,
 			);
 			path = Screens;
+			sourceTree = "<group>";
+		};
+		94788C5ADC3AD6CD57AFC59B /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				F13C67079F18F2C145C3C97B /* Config.xcconfig */,
+			);
+			path = Configuration;
 			sourceTree = "<group>";
 		};
 		AF05884568B3357F174ABA25 /* Packages */ = {
@@ -258,14 +267,6 @@
 				CA8B819F35E647FEF5C524D6 /* HorizonUITests.swift */,
 			);
 			path = HorizonUITests;
-			sourceTree = "<group>";
-		};
-		"TEMP_3ACBA68A-6587-4D23-A2E6-02C091AA8522" /* horizon-watch */ = {
-			isa = PBXGroup;
-			children = (
-				"TEMP_524D445A-BCB3-4FDF-A17D-097BE0437F54" /* Config.xcconfig */,
-			);
-			path = "horizon-watch";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -549,7 +550,7 @@
 		};
 		A407A7575B09252C6B166F21 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_524D445A-BCB3-4FDF-A17D-097BE0437F54" /* Config.xcconfig */;
+			baseConfigurationReference = F13C67079F18F2C145C3C97B /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -620,7 +621,7 @@
 		};
 		AA7527002E10A25D9CA874A2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_524D445A-BCB3-4FDF-A17D-097BE0437F54" /* Config.xcconfig */;
+			baseConfigurationReference = F13C67079F18F2C145C3C97B /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

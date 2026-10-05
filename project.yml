@@ -6,9 +6,13 @@ options:
   developmentLanguage: en
   createIntermediateGroups: true
   groupSortPosition: top
+# In its own folder, listed as a project folder: XcodeGen gives a root-level config file a
+# random id at every generation, which would change the project on each run.
+fileGroups:
+  - Configuration
 configFiles:
-  Debug: Config.xcconfig
-  Release: Config.xcconfig
+  Debug: Configuration/Config.xcconfig
+  Release: Configuration/Config.xcconfig
 settings:
   base:
     SWIFT_VERSION: "6.0"

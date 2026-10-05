@@ -9,6 +9,8 @@ OUT="${1:-build/ui-tests}"
 [ $# -gt 0 ] && shift
 rm -rf build/ui-tests.xcresult "$OUT"
 xcodegen generate >/dev/null
+open -a Simulator
+echo "Running the UI tests on $DEVICE (about 3 minutes)..."
 set +e
 xcodebuild -project Horizon.xcodeproj -scheme Horizon \
     -destination "platform=watchOS Simulator,name=$DEVICE" -derivedDataPath build/dd \
@@ -31,3 +33,4 @@ if manifest.exists():
                 shutil.copy(source / attachment["exportedFileName"], target / (name.split("_0_")[0] + ".png"))
 PY
 rm -rf "$TMP"
+echo "Screenshots: $OUT"

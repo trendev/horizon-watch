@@ -47,11 +47,16 @@ xcodebuild -project Horizon.xcodeproj -scheme Horizon \
 
 # UI tests on the simulator; screenshots are exported to build/ui-tests
 Tools/ui_tests.sh
+
+# Just see the app: builds, opens the Simulator window and launches Horizon
+Tools/run_sim.sh build/horizon.png
 ```
+
+`xcrun simctl` boots a simulator without a window. The two scripts open the Simulator app for you; otherwise run `open -a Simulator`.
 
 `Horizon.xcodeproj` is generated from `project.yml` and committed, so the repository opens in Xcode as is. Change `project.yml`, not the project.
 
-To run on a watch, put your team in a `Local.xcconfig` next to `Config.xcconfig` (it is not committed):
+To run on a watch, put your team in `Configuration/Local.xcconfig`, next to `Config.xcconfig` (it is not committed):
 
 ```
 DEVELOPMENT_TEAM = ABCDE12345
@@ -81,7 +86,7 @@ docs/                  specification, strings, fixtures, mockup
 | `Tools/build_cities.py` | Downloads GeoNames *cities15000* and writes the offline city list `cities15000.bin`. The only step that uses the network, and only on the Mac. |
 | `Tools/generate_fixtures.py` | Recomputes `docs/fixtures/sun-times.csv` with astral at the spec's −0.833° horizon. |
 | `Tools/make_icon.swift` | Draws the app icon. |
-| `Tools/run_sim.sh` | Builds, launches in a simulator with launch arguments and saves a screenshot. |
+| `Tools/run_sim.sh` | Builds, opens the Simulator window, launches the app with launch arguments and saves a screenshot. |
 | `Tools/ui_tests.sh` | Runs the UI tests and exports their screenshots. |
 | `Tools/check_notifications.sh` | Prints how many notifications the app scheduled (expected: at most 61 of the 64 allowed). |
 

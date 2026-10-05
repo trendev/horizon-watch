@@ -17,9 +17,11 @@ if [ -z "$SKIP_BUILD" ]; then
         2>&1 | grep -E "error|warning: |BUILD" | grep -v appintentsmetadata | sort -u
 fi
 xcrun simctl bootstatus "$DEVICE" -b >/dev/null
+# simctl boots the simulator without a window; this shows it.
+open -a Simulator
 xcrun simctl terminate "$DEVICE" fr.trendev.horizon >/dev/null 2>&1 || true
 xcrun simctl install "$DEVICE" build/dd/Build/Products/Debug-watchsimulator/Horizon.app
 xcrun simctl launch "$DEVICE" fr.trendev.horizon "$@" >/dev/null
 sleep "${WAIT:-6}"
 xcrun simctl io "$DEVICE" screenshot "$OUT" >/dev/null 2>&1
-echo "$OUT"
+echo "Horizon is running in the Simulator window ($DEVICE). Screenshot: $OUT"
