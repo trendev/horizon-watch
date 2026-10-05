@@ -37,6 +37,9 @@ final class AppModel {
     /// A day picked on the 7-day page, shown on the arc instead of today.
     var viewedDay: SolarDay?
     var toast: Toast?
+    /// Set by a complication tap or the "Open Horizon" shortcut: the next activation confirms
+    /// the armed alarm with "Persistent alarm · Set for 19:33".
+    @ObservationIgnored var confirmsArming = false
 
     @ObservationIgnored private let sessions = AlarmSessionController()
     /// An occurrence whose session was refused; not retried until the app next becomes active.
@@ -197,7 +200,13 @@ final class AppModel {
     /// Launch, return to the foreground, complication tap, notification tap.
     func becameActive() {
         refusedArmID = nil
+        // The Control Center toggle writes the settings from outside the app.
+        var stored = store.alarm
+        if overrides.sunriseEnabled != nil { stored.sunriseEnabled = settings.sunriseEnabled }
+        if overrides.sunsetEnabled != nil { stored.sunsetEnabled = settings.sunsetEnabled }
+        settings = stored
         replan()
+        if confirmsArming { confirmArming() }
         Task { await refreshLocation() }
     }
 
@@ -281,6 +290,24 @@ final class AppModel {
         }
     }
 
+    /// A complication or the shortcut opened the app. If it is already active, confirm now.
+    func openedFromOutside() {
+        confirmsArming = true
+        if hasLaunched, isActive {
+            replan()
+            confirmArming()
+        }
+    }
+
+    private func confirmArming() {
+        confirmsArming = false
+        guard isNextOccurrenceArmed, let event = plan?.nextOccurrence else { return }
+        show(Toast(
+            title: L10n.string("mode.persistent"),
+            subtitle: L10n.format("toast.armed.subtitle", Fmt.time(event.date, in: timeZone)),
+            kind: event.kind))
+    }
+
     /// watchOS relaunched the app for a session armed by an earlier launch.
     func adopt(_ session: WKExtendedRuntimeSession) {
         sessions.adopt(session, id: armedID)
@@ -341,7 +368,9 @@ final class AppModel {
                 }
             } catch {
                 // Typically: notifications are not allowed. The alarms then rely on the session only.
+                #if DEBUG
                 print("HORIZON scheduling failed: \(error.localizedDescription)")
+                #endif
             }
             #if DEBUG
             let pending = await UNUserNotificationCenter.current().pendingNotificationRequests()

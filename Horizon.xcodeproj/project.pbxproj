@@ -9,32 +9,50 @@
 /* Begin PBXBuildFile section */
 		0DD34C5B7893FAEB1CB71B32 /* HorizonCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6214A1FEC7A842F90227D53C /* HorizonCore */; };
 		1613586742E193A826EDDFF9 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8716DF33C49445E6324BAC72 /* Localizable.xcstrings */; };
+		17740D59C2D4FA9F0A7D7262 /* HorizonCore in Frameworks */ = {isa = PBXBuildFile; productRef = 01531B7FBF99C51E13A8F23C /* HorizonCore */; };
+		24D3D13ACD9D03D36BFBA506 /* OpenHorizonIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A9FC57C284E055FBCF67C8 /* OpenHorizonIntent.swift */; };
 		3615FEB2AEA916BEC7BEFA22 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CE323CFF2F6939E42873D1 /* WeekView.swift */; };
 		3A78CD3DF8DE35A9A8718DC2 /* AdaptiveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA2B61135177CF11DBCEFFD /* AdaptiveLabel.swift */; };
+		3C63D920CD3A25AA3957539E /* HorizonWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77A87F539A5DD1D0E49A2A6 /* HorizonWidgets.swift */; };
 		460554FD7A07417DA07C06D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67E431AEA5AA00C5B6CAAAF /* AppDelegate.swift */; };
+		4E5201129F7D7F1FE21F77C1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882C34F1C4EF91F0970189FA /* Theme.swift */; };
+		5772D6AB66E2758E53FD82E8 /* HorizonWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A6F9B4FB86D2FD5B2F3270F7 /* HorizonWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5B3AE2E560004EACCEC15B7E /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EC4448BB00FCA4927AF231 /* Formatting.swift */; };
 		62B0E0FCB5FB350CE5895A7F /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3A1A82D1BD89172C01B96D /* CountdownView.swift */; };
 		658F65FA2A4DF2B7497D2E27 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5BE6F40EF233FE0C1447D /* LocationView.swift */; };
+		69A0B9CACB13FF36ECF19641 /* SetSunAlarmsIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F91ADBCFBDFB3DA12CCD35 /* SetSunAlarmsIntent.swift */; };
+		7071F949F41F90F72BB0105B /* SolarTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FAF01329BB65A94964A3ABA /* SolarTimeline.swift */; };
 		72FF33717DEE392372AF6EE7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BAA5B688D64339F87F4124 /* SettingsView.swift */; };
 		7F1F4D7C8E7BD900CD25FB69 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882C34F1C4EF91F0970189FA /* Theme.swift */; };
+		902C6A09D24667D703C6AA5E /* SetSunAlarmsIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F91ADBCFBDFB3DA12CCD35 /* SetSunAlarmsIntent.swift */; };
 		90C047233F4EDE4F0008026D /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 7DF4C6F5911F48E9FD254851 /* InfoPlist.xcstrings */; };
 		9322D1A56C43103B21AE8A91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 190551A2EDF76A36C912708D /* Assets.xcassets */; };
 		98B2893E5BBDE1F2BBF86FF4 /* AlarmSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E15DB7512B8CB4CE39B29E /* AlarmSessionController.swift */; };
+		9A6F55E250C7D0C24F5BA089 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8716DF33C49445E6324BAC72 /* Localizable.xcstrings */; };
 		9E88566A0641CE064DF900A3 /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74B7F48CC8EFB7C4D55EFD3 /* AlarmView.swift */; };
 		A139A3500F3934E87DE326F1 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3758BE4E9B0679C34C508F60 /* Notifications.swift */; };
 		AF4791B9FB1F08DF5A30286E /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96103469DD016FCE14994BB /* AppModel.swift */; };
 		BBDD69C46370B08900079EA2 /* SunArcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2138569790A86D8521C748D /* SunArcView.swift */; };
 		C19F1AF7DCC8DFED48417379 /* MainArcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4508613D28AD105CE3F7127 /* MainArcView.swift */; };
 		CB9D5A386B031D34D4D126BE /* HorizonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E6A03BF690609D4315D69A /* HorizonApp.swift */; };
+		EA6CD83862E076DA3AE382B3 /* WidgetViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700E5BB1CE5823F36FFF22EA /* WidgetViews.swift */; };
 		EA760F730C6F62FA1A6A9295 /* CityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB19AC5F492F9BC07528D5F /* CityPickerView.swift */; };
 		EB70E4418199610EE1C905E2 /* HorizonUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B819F35E647FEF5C524D6 /* HorizonUITests.swift */; };
 		EBCA944D1B0DF528C6B0B0EF /* DebugOverrides.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE18DB0C3EBD04B7EE01FC4 /* DebugOverrides.swift */; };
 		F6D7B67006020E02F71BA44A /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6F56F11104566D9DAA7841 /* OnboardingView.swift */; };
 		FB4F55EBEED68502BFDE6241 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878067D092FDF5417BBF2784 /* NotificationView.swift */; };
 		FCBB7C3E0B800016DABFCB82 /* cities15000.bin in Resources */ = {isa = PBXBuildFile; fileRef = 2B86699D8BE8AD7F8BCDBB31 /* cities15000.bin */; };
+		FED47B56A3EE01D3E06C765C /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EC4448BB00FCA4927AF231 /* Formatting.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		48C4C5BFE74BCC7A9BE7E3C3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DEBF6D5E58F439D41A24637E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F95C096D50D2F7928A6959BC;
+			remoteInfo = HorizonWidgets;
+		};
 		55253AEB15F1C5EE00669C3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DEBF6D5E58F439D41A24637E /* Project object */;
@@ -43,6 +61,20 @@
 			remoteInfo = Horizon;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A079DD79ACA71A57E0E33B3C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				5772D6AB66E2758E53FD82E8 /* HorizonWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		04FAC60A1B3CFF177B9A9C4B /* Horizon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Horizon.entitlements; sourceTree = "<group>"; };
@@ -54,27 +86,35 @@
 		2DC1C5C8ADAE879CB118DA9A /* HorizonCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = HorizonCore; path = Packages/HorizonCore; sourceTree = SOURCE_ROOT; };
 		3758BE4E9B0679C34C508F60 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		39E15DB7512B8CB4CE39B29E /* AlarmSessionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSessionController.swift; sourceTree = "<group>"; };
+		39F91ADBCFBDFB3DA12CCD35 /* SetSunAlarmsIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSunAlarmsIntent.swift; sourceTree = "<group>"; };
 		3A2EC1B102AB7C02B9DF552B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3A49D81BB378FA8254552373 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6FAF01329BB65A94964A3ABA /* SolarTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarTimeline.swift; sourceTree = "<group>"; };
+		700E5BB1CE5823F36FFF22EA /* WidgetViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetViews.swift; sourceTree = "<group>"; };
 		7AA2B61135177CF11DBCEFFD /* AdaptiveLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLabel.swift; sourceTree = "<group>"; };
 		7DF4C6F5911F48E9FD254851 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		821A7F96269443BF5A94C8C2 /* HorizonUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HorizonUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		83A9FC57C284E055FBCF67C8 /* OpenHorizonIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenHorizonIntent.swift; sourceTree = "<group>"; };
 		8716DF33C49445E6324BAC72 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		878067D092FDF5417BBF2784 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		882C34F1C4EF91F0970189FA /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		A6F9B4FB86D2FD5B2F3270F7 /* HorizonWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HorizonWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4508613D28AD105CE3F7127 /* MainArcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainArcView.swift; sourceTree = "<group>"; };
 		C67E431AEA5AA00C5B6CAAAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C74B7F48CC8EFB7C4D55EFD3 /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
 		C96103469DD016FCE14994BB /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		CA8B819F35E647FEF5C524D6 /* HorizonUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizonUITests.swift; sourceTree = "<group>"; };
 		D6BAA5B688D64339F87F4124 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D77A87F539A5DD1D0E49A2A6 /* HorizonWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizonWidgets.swift; sourceTree = "<group>"; };
 		D9CE323CFF2F6939E42873D1 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
 		DAE18DB0C3EBD04B7EE01FC4 /* DebugOverrides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugOverrides.swift; sourceTree = "<group>"; };
+		E002162C4CF2A42D1B003F59 /* HorizonWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HorizonWidgets.entitlements; sourceTree = "<group>"; };
 		F2138569790A86D8521C748D /* SunArcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunArcView.swift; sourceTree = "<group>"; };
 		F6E6A03BF690609D4315D69A /* HorizonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizonApp.swift; sourceTree = "<group>"; };
 		F8E7191B980D0E8899E8C175 /* Horizon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Horizon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD6F56F11104566D9DAA7841 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		FFB19AC5F492F9BC07528D5F /* CityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPickerView.swift; sourceTree = "<group>"; };
-		"TEMP_CC14BAB0-4683-4E88-B6A8-815C46307128" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		"TEMP_524D445A-BCB3-4FDF-A17D-097BE0437F54" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +126,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3116EC30213DEF8932F7926E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17740D59C2D4FA9F0A7D7262 /* HorizonCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -93,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				26EC4448BB00FCA4927AF231 /* Formatting.swift */,
+				39F91ADBCFBDFB3DA12CCD35 /* SetSunAlarmsIntent.swift */,
 				882C34F1C4EF91F0970189FA /* Theme.swift */,
 			);
 			path = Shared;
@@ -101,6 +150,7 @@
 		2924AEB0014AFFAE4CC50891 /* HorizonApp */ = {
 			isa = PBXGroup;
 			children = (
+				C692AEC60F2D0B136E4B94E1 /* Intents */,
 				CAC9F1435865EB8BD0F1E85F /* Resources */,
 				79E5435607BB4E2AB8613ABF /* Screens */,
 				39E15DB7512B8CB4CE39B29E /* AlarmSessionController.swift */,
@@ -120,6 +170,7 @@
 			children = (
 				2924AEB0014AFFAE4CC50891 /* HorizonApp */,
 				FF88A0BDC02C2C3663652E4A /* HorizonUITests */,
+				BDC1D29F127E54BF6AA7C2CB /* HorizonWidgets */,
 				AF05884568B3357F174ABA25 /* Packages */,
 				0D6F1A6E36891B9AB15BDBFA /* Shared */,
 				63B21713585F28CF598980C5 /* Products */,
@@ -139,6 +190,7 @@
 			children = (
 				F8E7191B980D0E8899E8C175 /* Horizon.app */,
 				821A7F96269443BF5A94C8C2 /* HorizonUITests.xctest */,
+				A6F9B4FB86D2FD5B2F3270F7 /* HorizonWidgets.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,6 +221,26 @@
 			path = Packages;
 			sourceTree = "<group>";
 		};
+		BDC1D29F127E54BF6AA7C2CB /* HorizonWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				E002162C4CF2A42D1B003F59 /* HorizonWidgets.entitlements */,
+				D77A87F539A5DD1D0E49A2A6 /* HorizonWidgets.swift */,
+				3A49D81BB378FA8254552373 /* Info.plist */,
+				6FAF01329BB65A94964A3ABA /* SolarTimeline.swift */,
+				700E5BB1CE5823F36FFF22EA /* WidgetViews.swift */,
+			);
+			path = HorizonWidgets;
+			sourceTree = "<group>";
+		};
+		C692AEC60F2D0B136E4B94E1 /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				83A9FC57C284E055FBCF67C8 /* OpenHorizonIntent.swift */,
+			);
+			path = Intents;
+			sourceTree = "<group>";
+		};
 		CAC9F1435865EB8BD0F1E85F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,10 +260,10 @@
 			path = HorizonUITests;
 			sourceTree = "<group>";
 		};
-		"TEMP_2981A822-0FEA-4C35-B718-74DE7E33A6F5" /* horizon-watch */ = {
+		"TEMP_3ACBA68A-6587-4D23-A2E6-02C091AA8522" /* horizon-watch */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_CC14BAB0-4683-4E88-B6A8-815C46307128" /* Config.xcconfig */,
+				"TEMP_524D445A-BCB3-4FDF-A17D-097BE0437F54" /* Config.xcconfig */,
 			);
 			path = "horizon-watch";
 			sourceTree = "<group>";
@@ -206,10 +278,12 @@
 				F15968CF89E2A5C1EFC81525 /* Sources */,
 				17D57F18E37D97B7F9059713 /* Resources */,
 				0DBB18AD290BB338A5E959ED /* Frameworks */,
+				A079DD79ACA71A57E0E33B3C /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A904CF5D293F7BE47310B35F /* PBXTargetDependency */,
 			);
 			name = Horizon;
 			packageProductDependencies = (
@@ -237,6 +311,26 @@
 			productReference = 821A7F96269443BF5A94C8C2 /* HorizonUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		F95C096D50D2F7928A6959BC /* HorizonWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 301193BBE8A77DAECF94FF9C /* Build configuration list for PBXNativeTarget "HorizonWidgets" */;
+			buildPhases = (
+				8473CCCC70534A824B31BCB8 /* Sources */,
+				2FE5605B83D48671C5ECAD21 /* Resources */,
+				3116EC30213DEF8932F7926E /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HorizonWidgets;
+			packageProductDependencies = (
+				01531B7FBF99C51E13A8F23C /* HorizonCore */,
+			);
+			productName = HorizonWidgets;
+			productReference = A6F9B4FB86D2FD5B2F3270F7 /* HorizonWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -254,6 +348,10 @@
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 						TestTargetID = 8A70486345F78B79281EC178;
+					};
+					F95C096D50D2F7928A6959BC = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -286,6 +384,7 @@
 			projectRoot = "";
 			targets = (
 				8A70486345F78B79281EC178 /* Horizon */,
+				F95C096D50D2F7928A6959BC /* HorizonWidgets */,
 				F0561E0CA9489D42A19DC2E4 /* HorizonUITests */,
 			);
 		};
@@ -303,6 +402,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2FE5605B83D48671C5ECAD21 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A6F55E250C7D0C24F5BA089 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -311,6 +418,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB70E4418199610EE1C905E2 /* HorizonUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8473CCCC70534A824B31BCB8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FED47B56A3EE01D3E06C765C /* Formatting.swift in Sources */,
+				3C63D920CD3A25AA3957539E /* HorizonWidgets.swift in Sources */,
+				902C6A09D24667D703C6AA5E /* SetSunAlarmsIntent.swift in Sources */,
+				7071F949F41F90F72BB0105B /* SolarTimeline.swift in Sources */,
+				4E5201129F7D7F1FE21F77C1 /* Theme.swift in Sources */,
+				EA6CD83862E076DA3AE382B3 /* WidgetViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,6 +453,8 @@
 				FB4F55EBEED68502BFDE6241 /* NotificationView.swift in Sources */,
 				A139A3500F3934E87DE326F1 /* Notifications.swift in Sources */,
 				F6D7B67006020E02F71BA44A /* OnboardingView.swift in Sources */,
+				24D3D13ACD9D03D36BFBA506 /* OpenHorizonIntent.swift in Sources */,
+				69A0B9CACB13FF36ECF19641 /* SetSunAlarmsIntent.swift in Sources */,
 				72FF33717DEE392372AF6EE7 /* SettingsView.swift in Sources */,
 				BBDD69C46370B08900079EA2 /* SunArcView.swift in Sources */,
 				7F1F4D7C8E7BD900CD25FB69 /* Theme.swift in Sources */,
@@ -343,6 +465,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A904CF5D293F7BE47310B35F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F95C096D50D2F7928A6959BC /* HorizonWidgets */;
+			targetProxy = 48C4C5BFE74BCC7A9BE7E3C3 /* PBXContainerItemProxy */;
+		};
 		B36BB1E18FB01688BC3BCDAF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8A70486345F78B79281EC178 /* Horizon */;
@@ -351,6 +478,24 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		03F191AF7CBB0851992CE49A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HorizonWidgets/HorizonWidgets.entitlements;
+				INFOPLIST_FILE = HorizonWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = fr.trendev.horizon.widgets;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
 		33E9CFD1A8D984FF62986975 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -404,7 +549,7 @@
 		};
 		A407A7575B09252C6B166F21 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_CC14BAB0-4683-4E88-B6A8-815C46307128" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_524D445A-BCB3-4FDF-A17D-097BE0437F54" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -475,7 +620,7 @@
 		};
 		AA7527002E10A25D9CA874A2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_CC14BAB0-4683-4E88-B6A8-815C46307128" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_524D445A-BCB3-4FDF-A17D-097BE0437F54" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -556,9 +701,36 @@
 			};
 			name = Release;
 		};
+		F0DEBE7E917F65D89CF53BBB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = HorizonWidgets/HorizonWidgets.entitlements;
+				INFOPLIST_FILE = HorizonWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = fr.trendev.horizon.widgets;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		301193BBE8A77DAECF94FF9C /* Build configuration list for PBXNativeTarget "HorizonWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0DEBE7E917F65D89CF53BBB /* Debug */,
+				03F191AF7CBB0851992CE49A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		429CD92F2C4A79FFEC159615 /* Build configuration list for PBXNativeTarget "Horizon" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -596,6 +768,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		01531B7FBF99C51E13A8F23C /* HorizonCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HorizonCore;
+		};
 		6214A1FEC7A842F90227D53C /* HorizonCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = HorizonCore;

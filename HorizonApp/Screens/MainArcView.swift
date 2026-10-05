@@ -208,7 +208,7 @@ struct MainArcView: View {
     private func footer(_ plan: AlarmPlan) -> some View {
         if let toast = model.toast {
             HStack(spacing: 6) {
-                Image(systemName: "checkmark.circle.fill")
+                Image(systemName: toast.title == L10n.string("mode.persistent") ? "bell.circle.fill" : "checkmark.circle.fill")
                     .foregroundStyle(toast.kind.map(Theme.color) ?? Theme.dawn)
                 VStack(alignment: .leading, spacing: 0) {
                     Text(toast.title)

@@ -31,6 +31,7 @@ targets:
       - Shared
     dependencies:
       - package: HorizonCore
+      - target: HorizonWidgets
     info:
       path: HorizonApp/Info.plist
       properties:
@@ -53,6 +54,32 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         ENABLE_PREVIEWS: YES
+  HorizonWidgets:
+    type: app-extension
+    platform: watchOS
+    sources:
+      - HorizonWidgets
+      - Shared
+      - path: HorizonApp/Resources/Localizable.xcstrings
+    dependencies:
+      - package: HorizonCore
+    info:
+      path: HorizonWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Horizon
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: HorizonWidgets/HorizonWidgets.entitlements
+      properties:
+        com.apple.security.application-groups: [group.fr.trendev.horizon]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fr.trendev.horizon.widgets
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
+        SKIP_INSTALL: YES
   HorizonUITests:
     type: bundle.ui-testing
     platform: watchOS

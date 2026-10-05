@@ -9,6 +9,7 @@ struct HorizonApp: App {
         WindowGroup {
             RootView()
                 .environment(model)
+                .onOpenURL { _ in model.openedFromOutside() }
         }
         .backgroundTask(.appRefresh(AppModel.refreshTask)) {
             await AppModel.shared.backgroundRefresh()

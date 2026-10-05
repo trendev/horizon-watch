@@ -31,6 +31,13 @@ enum Fmt {
         return formatter.localizedString(for: min(date, now), relativeTo: now)
     }
 
+    /// "in 3 hr.", from `now` to a later `date`.
+    static func relative(_ now: Date, to date: Date, future: Bool) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .short
+        return formatter.localizedString(for: max(date, now), relativeTo: now)
+    }
+
     /// "Paris, France"
     static func place(city: String, countryCode: String?) -> String {
         guard let countryCode, let country = Locale.current.localizedString(forRegionCode: countryCode) else {
