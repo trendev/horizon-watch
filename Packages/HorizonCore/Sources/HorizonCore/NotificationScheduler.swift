@@ -58,14 +58,16 @@ public enum NotificationPlan {
 }
 
 /// The part of `UNUserNotificationCenter` the scheduler uses, so tests can substitute it.
+@MainActor
 public protocol NotificationCenterProtocol {
     func removeAllPendingNotificationRequests()
     func removePendingNotificationRequests(withIdentifiers identifiers: [String])
     func add(_ request: UNNotificationRequest) async throws
 }
 
-extension UNUserNotificationCenter: NotificationCenterProtocol {}
+extension UNUserNotificationCenter: @MainActor NotificationCenterProtocol {}
 
+@MainActor
 public struct NotificationScheduler {
     private let center: any NotificationCenterProtocol
 

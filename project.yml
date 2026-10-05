@@ -1,0 +1,80 @@
+name: Horizon
+options:
+  bundleIdPrefix: fr.trendev
+  deploymentTarget:
+    watchOS: "26.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+  groupSortPosition: top
+configFiles:
+  Debug: Config.xcconfig
+  Release: Config.xcconfig
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+packages:
+  HorizonCore:
+    path: Packages/HorizonCore
+targets:
+  Horizon:
+    type: application
+    platform: watchOS
+    sources:
+      - HorizonApp
+      - Shared
+    dependencies:
+      - package: HorizonCore
+    info:
+      path: HorizonApp/Info.plist
+      properties:
+        CFBundleDisplayName: Horizon
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        WKApplication: true
+        WKWatchOnly: true
+        WKBackgroundModes: [alarm]
+        NSLocationWhenInUseUsageDescription: Horizon uses your location to calculate sunrise and sunset times. It never leaves your watch.
+    entitlements:
+      path: HorizonApp/Horizon.entitlements
+      properties:
+        com.apple.security.application-groups: [group.fr.trendev.horizon]
+        com.apple.developer.usernotifications.time-sensitive: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fr.trendev.horizon
+        PRODUCT_NAME: Horizon
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ENABLE_PREVIEWS: YES
+  HorizonUITests:
+    type: bundle.ui-testing
+    platform: watchOS
+    sources:
+      - HorizonUITests
+    dependencies:
+      - target: Horizon
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fr.trendev.horizon.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Horizon
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
+schemes:
+  Horizon:
+    build:
+      targets:
+        Horizon: all
+        HorizonUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - HorizonUITests

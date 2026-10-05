@@ -106,6 +106,7 @@ final class FakeNotificationCenter: NotificationCenterProtocol {
     }
 }
 
+@MainActor
 @Suite struct NotificationSchedulerTests {
     let paris = AlarmPlanner(coordinates: Place.paris, timeZone: timeZone("Europe/Paris"))
     let now = date("2026-09-29T00:00:01+02:00")

@@ -1,0 +1,4 @@
+// Shared build settings. Put your own team in Local.xcconfig (not committed):
+//     DEVELOPMENT_TEAM = ABCDE12345
+DEVELOPMENT_TEAM =
+#include? "Local.xcconfig"
