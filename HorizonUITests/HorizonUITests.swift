@@ -30,6 +30,16 @@ final class HorizonUITests: XCTestCase {
         app.descendants(matching: .any).matching(identifier: identifier).firstMatch
     }
 
+    /// The week list scrolls before it pages, so swipe until the settings page is there.
+    @MainActor
+    private func openSettings(_ app: XCUIApplication) {
+        XCTAssertTrue(app.buttons["bell.sunrise"].waitForExistence(timeout: 20))
+        for _ in 0..<8 where !app.switches["settings.sunrise"].isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(app.switches["settings.sunrise"].isHittable)
+    }
+
     @MainActor
     private func labelled(_ app: XCUIApplication, containing text: String) -> XCUIElement {
         app.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS %@", text)).firstMatch
@@ -71,6 +81,9 @@ final class HorizonUITests: XCTestCase {
         XCTAssertTrue(element(app, "pill").waitForExistence(timeout: 5))
         XCTAssertEqual(app.buttons["bell.sunrise"].value as? String, "On")
         XCTAssertEqual(app.buttons["bell.sunset"].value as? String, "On")
+        // Done arms the next occurrence, here tonight's sunset.
+        XCTAssertEqual(element(app, "pill").label, "Persistent alarm")
+        XCTAssertTrue(app.buttons["bell.sunset"].isSelected)
         attach("main-after-onboarding")
     }
 
@@ -82,7 +95,8 @@ final class HorizonUITests: XCTestCase {
         XCTAssertEqual(element(app, "time.sunset").label, "19:33")
         XCTAssertEqual(element(app, "daylight").label, "11h 46m of daylight")
         XCTAssertTrue(element(app, "countdown").label.hasPrefix("Sunset in"))
-        XCTAssertEqual(element(app, "pill").label, "Automatic alarm")
+        // The app is in the foreground, so the next occurrence is armed as a persistent alarm.
+        XCTAssertEqual(element(app, "pill").label, "Persistent alarm")
     }
 
     @MainActor
@@ -100,7 +114,7 @@ final class HorizonUITests: XCTestCase {
 
         // The confirmation leaves after two seconds; sunset still rings.
         XCTAssertTrue(element(app, "pill").waitForExistence(timeout: 5))
-        XCTAssertEqual(element(app, "pill").label, "Automatic alarm")
+        XCTAssertEqual(element(app, "pill").label, "Persistent alarm")
 
         app.buttons["bell.sunset"].tap()
         XCTAssertTrue(element(app, "pill").waitForExistence(timeout: 5))
@@ -128,5 +142,159 @@ final class HorizonUITests: XCTestCase {
         element(app, "countdown").tap()
         XCTAssertTrue(element(app, "countdown").label.hasPrefix("Sunset in"))
         XCTAssertEqual(element(app, "time.sunrise").label, "7:47")
+    }
+
+    // MARK: - Alarm
+
+    @MainActor
+    func testStopOnTheAlarmScreenReturnsToTheArc() {
+        let app = launch(["-horizonSkipOnboarding", "YES", "-horizonRing", "sunset"])
+        let stop = app.buttons["alarm.stop"]
+        XCTAssertTrue(stop.waitForExistence(timeout: 20))
+        XCTAssertEqual(stop.label, "Stop")
+        XCTAssertTrue(app.staticTexts["Sunset"].exists)
+        XCTAssertTrue(app.staticTexts["19:33"].exists)
+        XCTAssertTrue(app.staticTexts["Paris"].exists)
+        attach("alarm-sunset")
+
+        stop.tap()
+        XCTAssertTrue(element(app, "pill").waitForExistence(timeout: 5))
+        XCTAssertFalse(stop.exists)
+    }
+
+    @MainActor
+    func testSunriseAlarmScreen() {
+        let app = launch(["-horizonSkipOnboarding", "YES", "-horizonRing", "sunrise"])
+        XCTAssertTrue(app.buttons["alarm.stop"].waitForExistence(timeout: 20))
+        XCTAssertTrue(app.staticTexts["Sunrise"].exists)
+        XCTAssertTrue(app.staticTexts["7:48"].exists)
+        attach("alarm-sunrise")
+    }
+
+    // MARK: - Pages
+
+    @MainActor
+    func testWeekPageSkipsAndRestoresOneOccurrence() {
+        let app = launch()
+        XCTAssertTrue(app.buttons["bell.sunrise"].waitForExistence(timeout: 20))
+        app.swipeUp()
+
+        let thursday = element(app, "week.sunrise-2026-10-01")
+        XCTAssertTrue(thursday.waitForExistence(timeout: 5))
+        XCTAssertTrue(labelled(app, containing: "Today").exists)
+        XCTAssertTrue(thursday.label.contains("7:49"))
+        XCTAssertEqual(thursday.value as? String, "")
+
+        thursday.press(forDuration: 1.2)
+        let skip = app.buttons["Skip this day"]
+        XCTAssertTrue(skip.waitForExistence(timeout: 5))
+        attach("week-long-press")
+        skip.tap()
+        XCTAssertTrue(thursday.waitForExistence(timeout: 5))
+        XCTAssertEqual(thursday.value as? String, "Skipped")
+        attach("week-thursday-skipped")
+
+        thursday.press(forDuration: 1.2)
+        let restore = app.buttons["Restore"]
+        XCTAssertTrue(restore.waitForExistence(timeout: 5))
+        restore.tap()
+        XCTAssertTrue(thursday.waitForExistence(timeout: 5))
+        XCTAssertEqual(thursday.value as? String, "")
+    }
+
+    @MainActor
+    func testTappingADayShowsItOnTheArc() {
+        let app = launch()
+        XCTAssertTrue(app.buttons["bell.sunrise"].waitForExistence(timeout: 20))
+        app.swipeUp()
+        let day = app.buttons["week.day.2026-10-01"]
+        XCTAssertTrue(day.waitForExistence(timeout: 5))
+        day.tap()
+
+        let back = app.buttons["preview.back"]
+        XCTAssertTrue(back.waitForExistence(timeout: 5))
+        XCTAssertEqual(element(app, "time.sunrise").label, "7:49")
+        XCTAssertEqual(element(app, "time.sunset").label, "19:29")
+        attach("arc-thursday")
+
+        back.tap()
+        XCTAssertTrue(element(app, "countdown").waitForExistence(timeout: 5))
+        XCTAssertEqual(element(app, "time.sunrise").label, "7:47")
+    }
+
+    @MainActor
+    func testSettingsTogglesMirrorTheBells() {
+        let app = launch()
+        openSettings(app)
+        let sunrise = app.switches["settings.sunrise"]
+        XCTAssertTrue(labelled(app, containing: "7:47 · every day").exists)
+        XCTAssertTrue(labelled(app, containing: "19:33 · every day").exists)
+        attach("settings")
+        XCTAssertEqual(sunrise.value as? String, "1")
+        sunrise.tap()
+        XCTAssertEqual(sunrise.value as? String, "0")
+
+        attach("settings-sunrise-off")
+        // Back up with the Digital Crown: Settings, 7 days, Today.
+        for _ in 0..<12 where !app.buttons["bell.sunrise"].isHittable {
+            XCUIDevice.shared.rotateDigitalCrown(delta: -1.5, velocity: 2)
+        }
+        attach("back-on-main")
+        XCTAssertTrue(app.buttons["bell.sunrise"].isHittable)
+        XCTAssertEqual(app.buttons["bell.sunrise"].value as? String, "Off")
+        XCTAssertEqual(app.buttons["bell.sunset"].value as? String, "On")
+    }
+
+    @MainActor
+    func testLocationScreenShowsTheCityOffline() {
+        let app = launch()
+        openSettings(app)
+        let row = element(app, "settings.location")
+        // The row is further down the list.
+        for _ in 0..<4 where !(row.exists && row.isHittable) {
+            app.swipeUp(velocity: .slow)
+        }
+        attach("settings-bottom")
+        XCTAssertTrue(row.isHittable)
+        row.tap()
+
+        XCTAssertTrue(element(app, "location.place").waitForExistence(timeout: 5))
+        XCTAssertEqual(element(app, "location.place").label, "Paris, France")
+        XCTAssertTrue(element(app, "location.status").label.hasPrefix("GPS"))
+        XCTAssertTrue(app.buttons["location.refresh"].exists)
+        attach("location")
+    }
+
+    // MARK: - System permission
+
+    /// Goes through the real notification prompt, on the real clock, so that the alarms are
+    /// actually scheduled. Tools/check_notifications.sh then reads how many are pending.
+    @MainActor
+    func testGrantingNotificationsFromOnboarding() {
+        let app = XCUIApplication()
+        app.launchArguments = [
+            "-horizonReset", "YES", "-horizonLocation", "48.8566,2.3522", "-horizonTimeZone", "Europe/Paris",
+            "-AppleLanguages", "(en)", "-AppleLocale", "en_GB"
+        ]
+        app.launch()
+        let action = app.buttons["onboarding.action"]
+        XCTAssertTrue(action.waitForExistence(timeout: 20))
+        action.tap()
+        XCTAssertTrue(app.staticTexts["Where are you?"].waitForExistence(timeout: 5))
+        action.tap()
+        XCTAssertTrue(app.staticTexts["Never miss it"].waitForExistence(timeout: 5))
+        action.tap()
+
+        // The prompt belongs to the system, not to the app. It only shows the first time.
+        let allow = XCUIApplication(bundleIdentifier: "com.apple.Carousel").buttons["Allow"]
+        if allow.waitForExistence(timeout: 8) {
+            attach("system-notification-prompt")
+            allow.tap()
+        }
+
+        XCTAssertTrue(app.staticTexts["Your alarms"].waitForExistence(timeout: 10))
+        app.swipeUp()
+        action.tap()
+        XCTAssertTrue(element(app, "pill").waitForExistence(timeout: 5))
     }
 }

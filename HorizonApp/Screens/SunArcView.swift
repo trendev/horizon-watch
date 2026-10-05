@@ -44,6 +44,8 @@ struct SunArcView<Centre: View>: View {
 
     /// Share of daylight elapsed, or nil at night.
     let fraction: Double?
+    /// Another day shown from the 7-day page: the whole arc, no sun and no moon.
+    var isPreview = false
     /// 0 to 1 in the last hour before sunset: the sky warms up.
     var warmth: Double = 0
     /// The glow under the horizon. Off for the small onboarding illustration.
@@ -59,7 +61,10 @@ struct SunArcView<Centre: View>: View {
             let geometry = ArcGeometry(size: proxy.size, mirrored: layoutDirection == .rightToLeft)
             ZStack {
                 ground(geometry)
-                if let fraction {
+                if isPreview {
+                    geometry.path(from: 0, to: 1)
+                        .stroke(arcGradient(geometry).opacity(0.75), style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                } else if let fraction {
                     day(geometry, fraction: fraction)
                 } else {
                     night(geometry)
@@ -79,7 +84,7 @@ struct SunArcView<Centre: View>: View {
         ZStack(alignment: .top) {
             if showsGround {
                 LinearGradient(
-                    colors: [(fraction == nil ? Theme.night : Theme.dawn2).opacity(0.22 + 0.25 * warmth), .clear],
+                    colors: [(fraction == nil && !isPreview ? Theme.night : Theme.dawn2).opacity(0.22 + 0.25 * warmth), .clear],
                     startPoint: .top, endPoint: .bottom)
                     .frame(height: 46)
             }
@@ -94,16 +99,11 @@ struct SunArcView<Centre: View>: View {
     @ViewBuilder
     private func day(_ geometry: ArcGeometry, fraction: Double) -> some View {
         let sun = geometry.point(fraction)
-        let colors = [Theme.dawn, Theme.dawn2, Theme.dusk]
 
         geometry.path(from: fraction, to: 1)
             .stroke(Theme.secondary.opacity(0.8), style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [0.5, 6]))
         geometry.path(from: 0, to: fraction)
-            .stroke(
-                LinearGradient(
-                    colors: geometry.mirrored ? colors.reversed() : colors,
-                    startPoint: .leading, endPoint: .trailing),
-                style: StrokeStyle(lineWidth: 3, lineCap: .round))
+            .stroke(arcGradient(geometry), style: StrokeStyle(lineWidth: 3, lineCap: .round))
         Circle()
             .fill(RadialGradient(colors: [Theme.dawn.opacity(0.55), .clear], center: .center, startRadius: 2, endRadius: 22))
             .frame(width: 44, height: 44)
@@ -113,6 +113,13 @@ struct SunArcView<Centre: View>: View {
             .fill(Theme.sun)
             .frame(width: 14, height: 14)
             .position(sun)
+    }
+
+    /// Dawn orange at the sunrise end, dusk pink at the sunset end.
+    private func arcGradient(_ geometry: ArcGeometry) -> LinearGradient {
+        let colors = [Theme.dawn, Theme.dawn2, Theme.dusk]
+        return LinearGradient(
+            colors: geometry.mirrored ? colors.reversed() : colors, startPoint: .leading, endPoint: .trailing)
     }
 
     @ViewBuilder

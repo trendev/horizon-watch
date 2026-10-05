@@ -67,6 +67,26 @@ public struct CityIndex: Sendable {
         return best.map { city(at: $0.index) }
     }
 
+    /// The place a person would name for these coordinates. Usually the nearest city, but a
+    /// large city wins over a small neighbour that is slightly closer: in Midtown the answer is
+    /// New York, not Hoboken. Distance is weighed by the fourth root of the population.
+    public func place(near coordinates: Coordinates) -> City? {
+        let reach = 60_000.0
+        var best: (index: Int, score: Double)?
+        for index in 0..<count {
+            let record = record(at: index)
+            guard abs(Double(record.latitude) - coordinates.latitude) * 111_000 < reach else { continue }
+            let distance = coordinates.distance(
+                to: Coordinates(latitude: Double(record.latitude), longitude: Double(record.longitude)))
+            guard distance < reach else { continue }
+            let score = distance / pow(Double(max(record.population, 1)), 0.25)
+            if best == nil || score < best!.score {
+                best = (index, score)
+            }
+        }
+        return best.map { city(at: $0.index) } ?? nearest(to: coordinates)
+    }
+
     /// Cities whose name starts with `prefix`, ignoring case and accents, biggest first.
     public func search(prefix: String, limit: Int) -> [City] {
         let needle = Self.fold(prefix.trimmingCharacters(in: .whitespaces))

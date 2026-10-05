@@ -12,6 +12,11 @@ final class AppDelegate: NSObject, WKApplicationDelegate, UNUserNotificationCent
         AppModel.shared.becameActive()
     }
 
+    /// Called when watchOS starts the app in the background for a scheduled alarm session.
+    func handle(_ extendedRuntimeSession: WKExtendedRuntimeSession) {
+        AppModel.shared.adopt(extendedRuntimeSession)
+    }
+
     /// The alarm still shows when Horizon is on screen.
     func userNotificationCenter(
         _ center: UNUserNotificationCenter, willPresent notification: UNNotification

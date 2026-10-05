@@ -19,7 +19,10 @@ struct MainArcView: View {
         }
         .pageTitle(Text(verbatim: "Horizon"))
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { showsOtherEvent = false }
+            if phase == .active {
+                showsOtherEvent = false
+                model.viewedDay = nil
+            }
         }
         .onChange(of: isLuminanceReduced) { _, _ in
             showsOtherEvent = false
@@ -32,7 +35,59 @@ struct MainArcView: View {
         return plan.nextEvent(of: next.kind == .sunset ? .sunrise : .sunset) ?? next
     }
 
+    @ViewBuilder
     private func content(_ plan: AlarmPlan) -> some View {
+        if let day = model.viewedDay {
+            preview(day, plan: plan)
+        } else {
+            today(plan)
+        }
+    }
+
+    /// Another day of the week on the arc: its times, no sun, no countdown.
+    private func preview(_ day: SolarDay, plan: AlarmPlan) -> some View {
+        VStack(spacing: 2) {
+            SunArcView(
+                fraction: nil, isPreview: true, settings: model.settings, armed: nil, toggle: model.toggle
+            ) { _ in
+                Button {
+                    model.viewedDay = nil
+                } label: {
+                    VStack(spacing: 0) {
+                        Text(Fmt.weekday(day.day, in: model.timeZone))
+                            .font(.system(size: Layout.size(24, compact: 19), weight: .semibold, design: .rounded))
+                        Image(systemName: "arrow.uturn.backward")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(Theme.secondary)
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("preview.back")
+            }
+            .frame(minHeight: 64, maxHeight: .infinity)
+            .overlay(alignment: .bottom) {
+                if let length = day.dayLength { daylightText(L10n.format("main.daylight", Fmt.duration(length))) }
+            }
+
+            VStack(spacing: -2) {
+                eventLabels(plan, target: nil)
+                HStack(spacing: 4) {
+                    timeText(day.sunrise, kind: .sunrise)
+                    Spacer(minLength: 0)
+                    timeText(day.sunset, kind: .sunset)
+                }
+            }
+            .padding(.horizontal, 6)
+
+            footer(plan)
+                .padding(.top, 3)
+        }
+        .padding(.horizontal, 4)
+        .padding(.bottom, Layout.size(8, compact: 5))
+        .ignoresSafeArea(edges: .bottom)
+    }
+
+    private func today(_ plan: AlarmPlan) -> some View {
         let target = target(plan)
         return VStack(spacing: 2) {
             TimelineView(.periodic(from: .now, by: 60)) { _ in
@@ -99,15 +154,19 @@ struct MainArcView: View {
     @ViewBuilder
     private func daylight(_ plan: AlarmPlan) -> some View {
         if let length = plan.displayDay.dayLength {
-            Text(L10n.format(
+            daylightText(L10n.format(
                 plan.displayIsTomorrow ? "main.daylight.tomorrow" : "main.daylight", Fmt.duration(length)))
-                .font(.system(size: Layout.size(10, compact: 8.5), weight: .medium, design: .rounded))
-                .foregroundStyle(Theme.secondary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
-                .padding(.horizontal, ArcGeometry.bellRadius * 2 + 10)
-                .accessibilityIdentifier("daylight")
         }
+    }
+
+    private func daylightText(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: Layout.size(10, compact: 8.5), weight: .medium, design: .rounded))
+            .foregroundStyle(Theme.secondary)
+            .lineLimit(1)
+            .minimumScaleFactor(0.6)
+            .padding(.horizontal, ArcGeometry.bellRadius * 2 + 10)
+            .accessibilityIdentifier("daylight")
     }
 
     // MARK: - Times under the horizon
@@ -128,8 +187,13 @@ struct MainArcView: View {
     }
 
     private func eventTime(_ kind: SolarEvent.Kind, plan: AlarmPlan, target: SolarEvent?) -> some View {
-        let date = followsTarget(kind, plan: plan, target: target) ? target?.date : plan.displayDay.date(of: kind)
-        return Text(date.map { Fmt.time($0, in: model.timeZone) } ?? "–")
+        timeText(
+            followsTarget(kind, plan: plan, target: target) ? target?.date : plan.displayDay.date(of: kind),
+            kind: kind)
+    }
+
+    private func timeText(_ date: Date?, kind: SolarEvent.Kind) -> some View {
+        Text(date.map { Fmt.time($0, in: model.timeZone) } ?? "–")
             .font(.system(size: Layout.size(23, compact: 18), weight: .semibold, design: .rounded))
             .monospacedDigit()
             .foregroundStyle(model.settings.isEnabled(kind) ? .white : Theme.secondary)

@@ -32,7 +32,15 @@ final class AppModel {
     /// Occurrence scheduled as a persistent alarm: the ring around a bell.
     private(set) var armedID: String?
     private(set) var isLocating = false
+    /// The alarm vibrating right now, shown full screen.
+    private(set) var ringing: SolarEvent?
+    /// A day picked on the 7-day page, shown on the arc instead of today.
+    var viewedDay: SolarDay?
     var toast: Toast?
+
+    @ObservationIgnored private let sessions = AlarmSessionController()
+    /// An occurrence whose session was refused; not retried until the app next becomes active.
+    @ObservationIgnored private var refusedArmID: String?
 
     @ObservationIgnored private var tick: Task<Void, Never>?
     @ObservationIgnored private var toastTask: Task<Void, Never>?
@@ -61,6 +69,10 @@ final class AppModel {
         if let coordinates = overrides.coordinates {
             location = located(coordinates, source: .gps)
         }
+
+        sessions.haptic = { [weak self] in self?.haptic ?? .notification }
+        sessions.onStart = { [weak self] in self?.alarmStarted() }
+        sessions.onEnd = { [weak self] failed in self?.alarmEnded(failed: failed) }
 
         NotificationCenter.default.addObserver(
             forName: .NSSystemTimeZoneDidChange, object: nil, queue: .main
@@ -134,7 +146,7 @@ final class AppModel {
     // MARK: - Location
 
     private func located(_ coordinates: Coordinates, source: StoredLocation.Source) -> StoredLocation {
-        let city = cities?.nearest(to: coordinates)
+        let city = cities?.place(near: coordinates)
         return StoredLocation(
             coordinates: coordinates, timestamp: now(), source: source,
             cityName: city?.name, countryCode: city?.countryCode)
@@ -177,10 +189,14 @@ final class AppModel {
     func finishedLaunching() {
         hasLaunched = true
         replan()
+        if let kind = overrides.ringing {
+            ringing = plan?.nextEvent(of: kind)
+        }
     }
 
     /// Launch, return to the foreground, complication tap, notification tap.
     func becameActive() {
+        refusedArmID = nil
         replan()
         Task { await refreshLocation() }
     }
@@ -205,6 +221,7 @@ final class AppModel {
         self.plan = plan
         guard hasLaunched else { return }
 
+        updateArming(plan)
         scheduleNotifications(plan)
         WidgetCenter.shared.reloadAllTimelines()
         scheduleBackgroundRefresh()
@@ -219,6 +236,92 @@ final class AppModel {
         }
     }
 
+    // MARK: - Persistent alarm
+
+    private var isActive: Bool {
+        WKApplication.shared().applicationState == .active
+    }
+
+    /// Signature: rising at sunrise, falling at sunset, so the wrist tells which one it is.
+    private var haptic: WKHapticType {
+        guard settings.vibration == .signature, let kind = armedEvent?.kind ?? ringing?.kind else {
+            return .notification
+        }
+        return kind == .sunrise ? .directionUp : .directionDown
+    }
+
+    private var armedEvent: SolarEvent? {
+        guard let armedID, let location else { return nil }
+        let planner = AlarmPlanner(coordinates: location.coordinates, timeZone: timeZone)
+        let today = CivilDay(containing: now(), in: timeZone)
+        return (-1...2).flatMap { planner.solarDay(today.adding(days: $0)).events }.first { $0.id == armedID }
+    }
+
+    private func setArmed(_ id: String?) {
+        armedID = id
+        store.armedOccurrenceID = id
+    }
+
+    /// Arming rule of the spec: whenever the app is active, the next enabled, non-skipped
+    /// occurrence within 36 hours becomes a persistent alarm. Only one can be armed.
+    private func updateArming(_ plan: AlarmPlan) {
+        guard overrides.armedOccurrenceID == nil, onboardingDone, ringing == nil else { return }
+        if isActive {
+            if let event = plan.armable, event.id != refusedArmID {
+                sessions.arm(id: event.id, at: wallClock(event.date))
+                setArmed(event.id)
+            } else {
+                sessions.disarm()
+                setArmed(nil)
+            }
+        } else if armedID != plan.nextOccurrence?.id {
+            // In the background nothing can be armed, but a stale alarm must not ring.
+            sessions.disarm()
+            setArmed(nil)
+        }
+    }
+
+    /// watchOS relaunched the app for a session armed by an earlier launch.
+    func adopt(_ session: WKExtendedRuntimeSession) {
+        sessions.adopt(session, id: armedID)
+    }
+
+    private func alarmStarted() {
+        ringing = armedEvent ?? plan?.nextOccurrence
+        // The session works, so the fallback notification and its follow-up are not needed.
+        if let armedID { scheduler.cancelAll(eventID: armedID) }
+    }
+
+    private func alarmEnded(failed: Bool) {
+        if failed { refusedArmID = armedID }
+        ringing = nil
+        setArmed(nil)
+        // In the foreground this arms the next occurrence. After Stop on the system alert the
+        // app is in the background, and the next occurrence stays automatic.
+        replan()
+    }
+
+    /// Stop on the alarm screen, or a double tap.
+    func stopAlarm() {
+        if sessions.isRinging {
+            sessions.stop()
+        } else {
+            alarmEnded(failed: false)
+        }
+    }
+
+    // MARK: - Week
+
+    func toggleSkip(_ event: SolarEvent) {
+        update { $0.toggleSkip(event.id) }
+    }
+
+    var isLocationDenied: Bool {
+        overrides.coordinates == nil && locationProvider.isDenied
+    }
+
+    // MARK: - Notifications
+
     private func scheduleNotifications(_ plan: AlarmPlan) {
         // Nothing is scheduled before the user has seen onboarding, or under a fake clock.
         guard onboardingDone, overrides.clockOffset == 0 else { return }
@@ -232,8 +335,13 @@ final class AppModel {
             await previous?.value
             // A newer plan is already queued behind this one.
             guard generation == self.notificationGeneration else { return }
-            try? await self.scheduler.apply(planned) {
-                Notifications.content(for: $0, placeName: placeName, timeZone: timeZone)
+            do {
+                try await self.scheduler.apply(planned) {
+                    Notifications.content(for: $0, placeName: placeName, timeZone: timeZone)
+                }
+            } catch {
+                // Typically: notifications are not allowed. The alarms then rely on the session only.
+                print("HORIZON scheduling failed: \(error.localizedDescription)")
             }
             #if DEBUG
             let pending = await UNUserNotificationCenter.current().pendingNotificationRequests()

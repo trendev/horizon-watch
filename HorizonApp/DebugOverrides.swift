@@ -17,6 +17,8 @@ struct DebugOverrides {
     var sunriseEnabled: Bool?
     var sunsetEnabled: Bool?
     var armedOccurrenceID: String?
+    /// Shows the alarm screen at launch, as if this alarm were ringing.
+    var ringing: SolarEvent.Kind?
 
     var isActive: Bool { clockOffset != 0 || coordinates != nil }
 
@@ -39,6 +41,7 @@ struct DebugOverrides {
             ?? defaults.string(forKey: "horizonSunrise").map { ($0 as NSString).boolValue }
         overrides.sunsetEnabled = defaults.string(forKey: "horizonSunset").map { ($0 as NSString).boolValue }
         overrides.armedOccurrenceID = defaults.string(forKey: "horizonArmed")
+        overrides.ringing = defaults.string(forKey: "horizonRing").flatMap(SolarEvent.Kind.init(rawValue:))
         #endif
         return overrides
     }()

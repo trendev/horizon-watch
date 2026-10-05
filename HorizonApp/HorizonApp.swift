@@ -20,11 +20,21 @@ struct HorizonApp: App {
 
 struct RootView: View {
     @Environment(AppModel.self) private var model
+    @State private var page = 0
 
     var body: some View {
         if model.onboardingDone {
             NavigationStack {
-                MainArcView()
+                // Three stacked pages, moved through with the Digital Crown.
+                TabView(selection: $page) {
+                    MainArcView().tag(0)
+                    WeekView(page: $page).tag(1)
+                    SettingsView().tag(2)
+                }
+                .tabViewStyle(.verticalPage)
+            }
+            .fullScreenCover(item: Binding(get: { model.ringing }, set: { _ in })) { event in
+                AlarmView(event: event)
             }
         } else {
             OnboardingView()

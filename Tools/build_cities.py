@@ -14,6 +14,7 @@ sorted by decreasing population.
 """
 import io
 import pathlib
+import re
 import struct
 import urllib.request
 import zipfile
@@ -27,25 +28,30 @@ def main():
         archive = zipfile.ZipFile(io.BytesIO(response.read()))
     lines = archive.read("cities15000.txt").decode("utf-8").splitlines()
 
+    rows = [line.split("\t") for line in lines]
+    names = {(f[8], f[1]) for f in rows}
+
     cities = []
-    for line in lines:
-        f = line.split("\t")
+    for f in rows:
         country = f[8]
-        if len(country) != 2:
+        # Sections of a city are not places people name: GeoNames' PPLX, and numbered
+        # districts of a listed city such as "Paris 04 Hôtel-de-Ville" or "Marseille 01".
+        district = re.match(r"(.+?) \d{1,2}\b", f[1])
+        if len(country) != 2 or f[7] == "PPLX" or (district and (country, district.group(1)) in names):
             continue
         cities.append((int(f[14] or 0), f[1], country, float(f[4]), float(f[5])))
     cities.sort(key=lambda city: (-city[0], city[1]))
 
-    records, names = bytearray(), bytearray()
+    records, blob = bytearray(), bytearray()
     for population, name, country, latitude, longitude in cities:
         encoded = name.encode("utf-8")
         records += struct.pack(
-            "<ffIIH2s", latitude, longitude, min(population, 0xFFFFFFFF), len(names), len(encoded),
+            "<ffIIH2s", latitude, longitude, min(population, 0xFFFFFFFF), len(blob), len(encoded),
             country.encode("ascii"))
-        names += encoded
+        blob += encoded
 
     TARGET.parent.mkdir(parents=True, exist_ok=True)
-    TARGET.write_bytes(b"HZC1" + struct.pack("<I", len(cities)) + records + names)
+    TARGET.write_bytes(b"HZC1" + struct.pack("<I", len(cities)) + records + blob)
     print(f"{len(cities)} cities, {TARGET.stat().st_size / 1024:.0f} KB")
 
 
