@@ -89,6 +89,8 @@
 		39F91ADBCFBDFB3DA12CCD35 /* SetSunAlarmsIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetSunAlarmsIntent.swift; sourceTree = "<group>"; };
 		3A2EC1B102AB7C02B9DF552B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3A49D81BB378FA8254552373 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		410E8E5513A9320C6D7CEC45 /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
+		66A7526467B233927FE54710 /* HorizonPersonalTeam.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HorizonPersonalTeam.entitlements; sourceTree = "<group>"; };
 		6FAF01329BB65A94964A3ABA /* SolarTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarTimeline.swift; sourceTree = "<group>"; };
 		700E5BB1CE5823F36FFF22EA /* WidgetViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetViews.swift; sourceTree = "<group>"; };
 		7AA2B61135177CF11DBCEFFD /* AdaptiveLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveLabel.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				DAE18DB0C3EBD04B7EE01FC4 /* DebugOverrides.swift */,
 				04FAC60A1B3CFF177B9A9C4B /* Horizon.entitlements */,
 				F6E6A03BF690609D4315D69A /* HorizonApp.swift */,
+				66A7526467B233927FE54710 /* HorizonPersonalTeam.entitlements */,
 				3A2EC1B102AB7C02B9DF552B /* Info.plist */,
 				3758BE4E9B0679C34C508F60 /* Notifications.swift */,
 			);
@@ -218,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				F13C67079F18F2C145C3C97B /* Config.xcconfig */,
+				410E8E5513A9320C6D7CEC45 /* Local.xcconfig */,
 			);
 			path = Configuration;
 			sourceTree = "<group>";
@@ -502,7 +506,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = HorizonApp/Horizon.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(HORIZON_APP_ENTITLEMENTS)";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = HorizonApp/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.trendev.horizon;
@@ -537,7 +541,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = HorizonApp/Horizon.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(HORIZON_APP_ENTITLEMENTS)";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = HorizonApp/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.trendev.horizon;

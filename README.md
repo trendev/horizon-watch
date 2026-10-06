@@ -56,13 +56,35 @@ Tools/run_sim.sh build/horizon.png
 
 `Horizon.xcodeproj` is generated from `project.yml` and committed, so the repository opens in Xcode as is. Change `project.yml`, not the project.
 
-To run on a watch, put your team in `Configuration/Local.xcconfig`, next to `Config.xcconfig` (it is not committed):
-
-```
-DEVELOPMENT_TEAM = ABCDE12345
-```
-
 The bundle identifiers are `fr.trendev.horizon` and `fr.trendev.horizon.widgets`, the App Group `group.fr.trendev.horizon`.
+
+## Install on your watch
+
+1. **Apple account.** In Xcode, Settings > Apple Accounts, sign in. If Xcode says "Failed to retrieve development teams", remove the account and add it again, and accept any pending agreement at developer.apple.com/account.
+2. **Your team.** Create `Configuration/Local.xcconfig`, next to `Config.xcconfig` (it is not committed):
+
+   ```
+   DEVELOPMENT_TEAM = ABCDE12345
+   ```
+
+   With a free account ("Personal Team") add one more line. Apple does not let a free account sign the Time Sensitive Notifications capability; alarms still ring in that build, but they do not break through a Focus:
+
+   ```
+   HORIZON_APP_ENTITLEMENTS = HorizonApp/HorizonPersonalTeam.entitlements
+   ```
+
+3. **Devices.** Plug the iPhone paired with the watch into the Mac and tap Trust. Keep the watch unlocked, next to it. Open Xcode's Window > Devices and Simulators once so both appear.
+4. **Developer Mode.** On the iPhone and on the watch: Settings > Privacy & Security > Developer Mode, then restart each. The entry appears only after step 3.
+5. **Install.**
+
+   ```sh
+   Tools/install_watch.sh
+   ```
+
+   Or in Xcode: choose the watch as the destination and press ⌘R. The first time, Xcode needs a few minutes to prepare the watch; until then it is listed with an error.
+6. **Trust.** If the watch refuses to open the app: on the iPhone, Settings > General > VPN & Device Management, trust your Apple account.
+
+A watch on a newer minor watchOS than Xcode's SDK has worked (watchOS 26.6 with Xcode 26.5). With a free account the app stops opening after 7 days: run the script again, settings are kept.
 
 ## Layout
 
@@ -88,6 +110,7 @@ docs/                  specification, strings, fixtures, mockup
 | `Tools/make_icon.swift` | Draws the app icon. |
 | `Tools/run_sim.sh` | Builds, opens the Simulator window, launches the app with launch arguments and saves a screenshot. |
 | `Tools/ui_tests.sh` | Runs the UI tests and exports their screenshots. |
+| `Tools/install_watch.sh` | Builds, signs and installs the app on the connected Apple Watch. |
 | `Tools/check_notifications.sh` | Prints how many notifications the app scheduled (expected: at most 61 of the 64 allowed). |
 
 Debug builds accept launch arguments that reproduce a scene, for screenshots and tests. The mockup's scene, Paris on 29 September 2026 at 16:17:
