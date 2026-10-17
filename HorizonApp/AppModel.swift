@@ -103,6 +103,18 @@ final class AppModel {
         location?.cityName ?? location.map { Fmt.coordinates($0.coordinates) } ?? ""
     }
 
+    /// The real path of a day, drawn on the arc.
+    func sunPath(_ day: SolarDay) -> SunPath? {
+        location.flatMap { SunPath(day: day, coordinates: $0.coordinates) }
+    }
+
+    /// The sunset that began the night ending with `day`'s sunrise.
+    func sunset(before day: SolarDay) -> Date? {
+        location.flatMap {
+            AlarmPlanner(coordinates: $0.coordinates, timeZone: timeZone).solarDay(day.day.adding(days: -1)).sunset
+        }
+    }
+
     var isNextOccurrenceArmed: Bool {
         armedID != nil && armedID == plan?.nextOccurrence?.id
     }

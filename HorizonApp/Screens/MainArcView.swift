@@ -48,7 +48,7 @@ struct MainArcView: View {
     private func preview(_ day: SolarDay, plan: AlarmPlan) -> some View {
         VStack(spacing: 2) {
             SunArcView(
-                fraction: nil, isPreview: true, settings: model.settings, armed: nil, toggle: model.toggle
+                path: model.sunPath(day), style: .preview, settings: model.settings, armed: nil, toggle: model.toggle
             ) { _ in
                 Button {
                     model.viewedDay = nil
@@ -83,7 +83,9 @@ struct MainArcView: View {
                 .padding(.top, 3)
         }
         .padding(.horizontal, 4)
-        .padding(.bottom, Layout.size(8, compact: 5))
+        // The page's bottom safe area is a large empty strip on watchOS, so the content uses it,
+        // with a margin that keeps the centred pill clear of the screen's rounded corners.
+        .padding(.bottom, Layout.size(12, compact: 9))
         .ignoresSafeArea(edges: .bottom)
     }
 
@@ -93,7 +95,8 @@ struct MainArcView: View {
             TimelineView(.periodic(from: .now, by: 60)) { _ in
                 let now = model.now()
                 SunArcView(
-                    fraction: plan.isNight ? nil : plan.daylightFraction(at: now),
+                    path: model.sunPath(plan.displayDay),
+                    style: arcStyle(plan, now: now),
                     warmth: warmth(plan, now: now),
                     settings: model.settings,
                     armed: SolarEvent.Kind.allCases.first(where: model.isArmed),
@@ -119,7 +122,9 @@ struct MainArcView: View {
                 .padding(.top, 3)
         }
         .padding(.horizontal, 4)
-        .padding(.bottom, Layout.size(8, compact: 5))
+        // The page's bottom safe area is a large empty strip on watchOS, so the content uses it,
+        // with a margin that keeps the centred pill clear of the screen's rounded corners.
+        .padding(.bottom, Layout.size(12, compact: 9))
         .ignoresSafeArea(edges: .bottom)
         .opacity(isLuminanceReduced ? 0.6 : 1)
     }
@@ -142,6 +147,21 @@ struct MainArcView: View {
             }
             .buttonStyle(.plain)
         }
+    }
+
+    /// The sun at the share of the daylight gone by; at night the moon at the share of the night
+    /// gone by, travelling from the sunset end to the sunrise end.
+    private func arcStyle(_ plan: AlarmPlan, now: Date) -> ArcStyle {
+        switch plan.displayDay.polar {
+        case .day: return .preview
+        case .night: return .night(moonAt: nil)
+        case .none: break
+        }
+        guard plan.isNight else { return .day(sunAt: plan.daylightFraction(at: now)) }
+        guard let sunrise = plan.displayDay.sunrise, let sunset = model.sunset(before: plan.displayDay) else {
+            return .night(moonAt: nil)
+        }
+        return .night(moonAt: 1 - SunPath.nightProgress(at: now, sunset: sunset, sunrise: sunrise))
     }
 
     /// The sky warms up during the last hour before sunset.
@@ -204,49 +224,70 @@ struct MainArcView: View {
 
     // MARK: - Pill and toast
 
+    /// A small capsule sized to its text, centred, fully inside the screen.
     @ViewBuilder
     private func footer(_ plan: AlarmPlan) -> some View {
         if let toast = model.toast {
-            HStack(spacing: 6) {
-                Image(systemName: toast.title == L10n.string("mode.persistent") ? "bell.circle.fill" : "checkmark.circle.fill")
-                    .foregroundStyle(toast.kind.map(Theme.color) ?? Theme.dawn)
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(toast.title)
-                        .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    if let subtitle = toast.subtitle {
-                        Text(subtitle)
-                            .font(.system(size: 10, design: .rounded))
-                            .foregroundStyle(Theme.secondary)
+            let tint = toast.kind.map(Theme.color) ?? Theme.dawn
+            let icon = Image(systemName: toast.title == L10n.string("mode.persistent") ? "bell.circle.fill" : "checkmark.circle.fill")
+                .font(.system(size: Layout.size(11, compact: 10)))
+                .foregroundStyle(tint)
+            let title = Text(toast.title)
+                .font(.system(size: Layout.size(12, compact: 11), weight: .semibold, design: .rounded))
+            let subtitle = toast.subtitle.map {
+                Text($0)
+                    .font(.system(size: Layout.size(11, compact: 10), design: .rounded))
+                    .foregroundStyle(Theme.secondary)
+            }
+            // One line when it fits ("Sunrise alarm on · Every day, on its own"), else two.
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 5) {
+                    icon
+                    title
+                    if let subtitle {
+                        Text(verbatim: "·").foregroundStyle(Theme.secondary)
+                        subtitle
                     }
                 }
                 .lineLimit(1)
-                .minimumScaleFactor(0.7)
-                Spacer(minLength: 0)
+                .fixedSize()
+                .pill(tint: tint, height: Self.pillHeight)
+
+                HStack(spacing: 5) {
+                    icon
+                    VStack(alignment: .leading, spacing: -1) {
+                        title
+                        subtitle
+                    }
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                }
+                .pill(tint: tint, height: subtitle == nil ? Self.pillHeight : Layout.size(32, compact: 29))
             }
-            .pill(tint: toast.kind.map(Theme.color) ?? Theme.dawn)
             .accessibilityElement(children: .combine)
             .accessibilityIdentifier("toast")
         } else if plan.nextOccurrence == nil && model.settings.anyEnabled {
             // Alarms are on but the sun gives nothing to ring for (polar day or night).
-            Color.clear.frame(height: Layout.size(30, compact: 25))
+            Color.clear.frame(height: Self.pillHeight)
         } else {
             let next = plan.nextOccurrence
-            HStack(spacing: 6) {
+            HStack(spacing: 5) {
                 Image(systemName: "bell.fill")
-                    .font(.system(size: 11))
+                    .font(.system(size: Layout.size(10, compact: 9)))
                     .foregroundStyle(next.map { Theme.color($0.kind) } ?? Theme.secondary)
                 Text(next == nil ? "mode.none" : model.isNextOccurrenceArmed ? "mode.persistent" : "mode.automatic")
-                    .font(.system(size: Layout.size(13, compact: 12), weight: .semibold, design: .rounded))
+                    .font(.system(size: Layout.size(12, compact: 11), weight: .semibold, design: .rounded))
                     .foregroundStyle(next == nil ? Theme.secondary : .white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
             }
-            .frame(maxWidth: .infinity)
-            .pill(tint: nil)
+            .pill(tint: nil, height: Self.pillHeight)
             .accessibilityElement(children: .combine)
             .accessibilityIdentifier("pill")
         }
     }
+
+    private static let pillHeight = Layout.size(24, compact: 21)
 
     private var missingLocation: some View {
         ScrollView {
@@ -263,10 +304,10 @@ struct MainArcView: View {
 }
 
 private extension View {
-    func pill(tint: Color?) -> some View {
+    func pill(tint: Color?, height: CGFloat) -> some View {
         self
             .padding(.horizontal, 10)
-            .frame(height: Layout.size(30, compact: 25))
+            .frame(height: height)
             .background(
                 Capsule().fill(tint.map { AnyShapeStyle($0.opacity(0.18)) } ?? AnyShapeStyle(Theme.card)))
             .overlay(Capsule().stroke((tint ?? .clear).opacity(0.5), lineWidth: 1))

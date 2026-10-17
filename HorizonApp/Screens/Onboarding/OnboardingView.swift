@@ -47,7 +47,8 @@ struct OnboardingView: View {
     private var welcome: some View {
         VStack(spacing: 6) {
             SunArcView(
-                fraction: 0.5, showsGround: false, settings: AlarmSettings(), armed: nil, toggle: { _ in }
+                path: nil, style: .day(sunAt: 0.5), showsGround: false, showsCentre: false, settings: AlarmSettings(), armed: nil,
+                toggle: { _ in }
             ) { _ in EmptyView() }
                 .frame(width: 130, height: 62)
                 .allowsHitTesting(false)

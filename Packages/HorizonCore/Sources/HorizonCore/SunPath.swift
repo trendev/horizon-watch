@@ -5,6 +5,11 @@ import Foundation
 public struct SunPathPoint: Equatable, Sendable {
     public let x: Double
     public let height: Double
+
+    public init(x: Double, height: Double) {
+        self.x = x
+        self.height = height
+    }
 }
 
 /// The sun's real path over one day, as drawn on the main screen's arc.

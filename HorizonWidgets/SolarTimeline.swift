@@ -6,6 +6,8 @@ struct SolarSnapshot: Sendable {
     let moment: SolarMoment
     let placeName: String
     let timeZone: TimeZone
+    /// The real path of the day of the next event, the same curve as the app's arc.
+    let path: SunPath?
 
     var next: SolarEvent { moment.next }
     var isNight: Bool { moment.isNight }
@@ -19,7 +21,9 @@ struct SolarSnapshot: Sendable {
         guard let planner = planner(store: store, timeZone: timeZone),
             let moment = SolarMoment.make(at: date, planner: planner, settings: store.alarm)
         else { return nil }
-        return SolarSnapshot(moment: moment, placeName: store.lastLocation?.cityName ?? "", timeZone: timeZone)
+        return SolarSnapshot(
+            moment: moment, placeName: store.lastLocation?.cityName ?? "", timeZone: timeZone,
+            path: SunPath(day: planner.solarDay(moment.next.day), coordinates: planner.coordinates))
     }
 
     /// Paris on the mockup's day, for the watch face editor.
@@ -27,9 +31,10 @@ struct SolarSnapshot: Sendable {
         let zone = TimeZone(identifier: "Europe/Paris") ?? .current
         let date = ISO8601DateFormatter().date(from: "2026-09-29T16:17:00+02:00") ?? .now
         let planner = AlarmPlanner(coordinates: Coordinates(latitude: 48.8566, longitude: 2.3522), timeZone: zone)
+        let moment = SolarMoment.make(at: date, planner: planner, settings: AlarmSettings())!
         return SolarSnapshot(
-            moment: SolarMoment.make(at: date, planner: planner, settings: AlarmSettings())!,
-            placeName: "Paris", timeZone: zone)
+            moment: moment, placeName: "Paris", timeZone: zone,
+            path: SunPath(day: planner.solarDay(moment.next.day), coordinates: planner.coordinates))
     }()
 }
 
