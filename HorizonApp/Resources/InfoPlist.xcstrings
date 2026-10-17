@@ -1,0 +1,84 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "NSLocationWhenInUseUsageDescription" : {
+      "comment" : "System location permission prompt (InfoPlist.xcstrings)",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon uses your location to calculate sunrise and sunset times. It never leaves your watch."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon utilise votre position pour calculer les heures de lever et de coucher du soleil. Elle ne quitte jamais votre montre."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon usa tu ubicación para calcular las horas del amanecer y la puesta de sol. Nunca sale de tu reloj."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon usa tu ubicación para calcular las horas del amanecer y la puesta de sol. Nunca sale de tu reloj."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Horizon usa a sua localização para calcular as horas do nascer e do pôr do sol. Ela nunca sai do seu relógio."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Horizon usa sua localização para calcular os horários do nascer e do pôr do sol. Ela nunca sai do seu relógio."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon usa la tua posizione per calcolare gli orari di alba e tramonto. Non lascia mai il tuo orologio."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon gebruikt je locatie om de tijden van zonsopkomst en zonsondergang te berekenen. Je locatie verlaat nooit je horloge."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon verwendet deinen Standort, um die Zeiten für Sonnenauf- und -untergang zu berechnen. Er verlässt nie deine Uhr."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon は日の出と日の入りの時刻を計算するために位置情報を使用します。位置情報が時計の外に出ることはありません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon 使用你的位置来计算日出和日落时间。位置信息绝不会离开你的手表。"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يستخدم Horizon موقعك لحساب أوقات الشروق والغروب. لا يغادر موقعك ساعتك أبدًا."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

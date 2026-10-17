@@ -1,0 +1,14 @@
+// Shared build settings. Per-developer values go in Local.xcconfig, next to this file
+// (not committed):
+//
+//     DEVELOPMENT_TEAM = ABCDE12345
+//
+// A free Apple account ("Personal Team") cannot sign the Time Sensitive Notifications
+// capability. To install on your own watch with one, also add this line to Local.xcconfig:
+//
+//     HORIZON_APP_ENTITLEMENTS = HorizonApp/HorizonPersonalTeam.entitlements
+//
+// Alarms still ring in that build; they just do not break through a Focus.
+DEVELOPMENT_TEAM =
+HORIZON_APP_ENTITLEMENTS = HorizonApp/Horizon.entitlements
+#include? "Local.xcconfig"

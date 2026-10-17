@@ -400,3 +400,21 @@ Horizon.xcodeproj
 4. Developer account: individual or TRENDev.
 5. Availability in mainland China.
 6. Native reviewers for the 12 locales.
+
+---
+
+## 16. Implementation notes
+
+Points the first build (October 2026) settled or had to decide. The simulator was the only device used.
+
+1. **Fixtures (3.2).** The first reference values came from astral's default refraction model, which puts the horizon at 90.789°, not the 90.833° of section 3.1. They were regenerated at 90.833° with `Tools/generate_fixtures.py`. The calculator agrees with them to about one second; at high latitudes near the solstice the two horizons differ by more than a minute.
+2. **Time format.** watchOS's own formatter writes times without a leading zero ("7:47"), like the system clock, including in 24-hour locales. The mockup's "07:47" is not forced.
+3. **Place names (3.4).** The city shown is the nearest one weighed by population, so a large city wins over a slightly closer small neighbour. Numbered districts ("Paris 04 …") are left out of the list. GeoNames names are not translated: "Paris" reads the same in every language; the country name is localized by the system.
+4. **Seconds of the countdown (5.2).** `Text(timerInterval:)` cannot style part of its text. The seconds are dimmed with a hard-stop gradient over fixed-width digits.
+5. **Control Center toggle (7).** Its action may run in the widget extension, which cannot reach the app's pending notifications. The toggle therefore opens Horizon, which replans. To be reconsidered if it proves annoying on a real watch.
+6. **Widgets (7).** Three widgets cover every row of the table: *Solar gauge* (corner), *Next event* (corner text, rectangular, inline) and *Countdown* (corner, circular). The rectangular one shows the mini arc in the Smart Stack and the sun bar on a watch face. The inline one's "in 3 hr." comes from a formatter and refreshes with the timeline, every 15 minutes.
+7. **Small watches.** Cases of 40 to 44 mm use smaller type and bells; the layout is otherwise the same.
+8. **Polar day or night.** The bottom pill is hidden while alarms are on but nothing can be planned.
+9. **Seen in the simulator:** every screen of section 5 in English, plus the main screen in German, Dutch, Portuguese, Japanese and Arabic; the Smart Stack card and its tap; 59 pending notifications with the refill reminder. **Not yet seen anywhere:** haptics, the alarm session ringing in the background, the system alert's Stop and Open, Focus behaviour, corner, circular and inline complications on a watch face, the Control Center toggle, the Action button shortcut. They are the checklist of section 11.
+10. **Free Apple accounts.** A Personal Team cannot sign the Time Sensitive Notifications capability. `HorizonApp/HorizonPersonalTeam.entitlements` is a variant without it, chosen in `Configuration/Local.xcconfig`, for installing on one's own watch. In that build notifications are delivered at the normal level and a Focus can silence them. The store build keeps the capability.
+

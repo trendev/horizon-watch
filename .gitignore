@@ -27,3 +27,6 @@ Packages/**/.build/
 *.provisionprofile
 AuthKey_*.p8
 *.env
+
+# Per-developer signing settings
+Local.xcconfig
