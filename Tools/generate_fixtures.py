@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Recomputes the sunrise and sunset columns of docs/fixtures/sun-times.csv.
+"""Recomputes the reference values used by the HorizonCore tests.
+
+docs/fixtures/sun-times.csv: sunrise and sunset columns.
+docs/fixtures/sun-altitudes.csv: the sun's true altitude (no refraction) at given instants,
+used to check the path drawn on the arc.
 
 The reference values come from astral 3.x, an implementation independent of the app,
 at the spec's definition: sun's upper limb at -0.833 degrees (zenith 90.833).
@@ -15,10 +19,23 @@ import pathlib
 import zoneinfo
 
 from astral import Observer, SunDirection
-from astral.sun import time_of_transit
+from astral.sun import elevation, time_of_transit
 
 ZENITH = 90.833
-PATH = pathlib.Path(__file__).resolve().parent.parent / "docs" / "fixtures" / "sun-times.csv"
+FIXTURES = pathlib.Path(__file__).resolve().parent.parent / "docs" / "fixtures"
+PATH = FIXTURES / "sun-times.csv"
+ALTITUDES = FIXTURES / "sun-altitudes.csv"
+
+# city, latitude, longitude, time zone, local instants
+ALTITUDE_CASES = [
+    ("Paris", 48.8566, 2.3522, "Europe/Paris", [
+        "2026-03-21T13:00", "2026-06-21T13:30", "2026-09-29T07:47", "2026-09-29T13:40",
+        "2026-09-29T16:17", "2026-12-21T12:50", "2026-10-17T16:17"]),
+    ("Quito", -0.1807, -78.4678, "America/Guayaquil", ["2026-03-21T12:20", "2026-06-21T09:00"]),
+    ("Sydney", -33.8688, 151.2093, "Australia/Sydney", ["2026-12-21T13:00", "2026-06-21T12:00"]),
+    ("Tromsø", 69.6492, 18.9553, "Europe/Oslo", ["2026-12-21T11:45", "2026-06-21T23:59"]),
+    ("Reykjavik", 64.1466, -21.9426, "Atlantic/Reykjavik", ["2026-06-21T13:30"]),
+]
 
 
 def transit(observer, day, direction):
@@ -53,7 +70,20 @@ def text(moment, zone):
     return moment.astimezone(zone).isoformat()
 
 
+def altitudes():
+    with ALTITUDES.open("w", encoding="utf-8", newline="") as target:
+        writer = csv.writer(target, lineterminator="\n")
+        writer.writerow(["city", "latitude", "longitude", "time", "altitude"])
+        for city, latitude, longitude, zone, instants in ALTITUDE_CASES:
+            observer = Observer(latitude, longitude, 0)
+            for text in instants:
+                moment = datetime.datetime.fromisoformat(text).replace(tzinfo=zoneinfo.ZoneInfo(zone))
+                value = elevation(observer, moment, with_refraction=False)
+                writer.writerow([city, latitude, longitude, moment.isoformat(), f"{value:.4f}"])
+
+
 def main():
+    altitudes()
     with PATH.open(encoding="utf-8", newline="") as source:
         rows = list(csv.DictReader(source))
     for row in rows:

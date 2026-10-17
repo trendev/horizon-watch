@@ -53,6 +53,20 @@ public enum SunCalculator {
         solarDay(CivilDay(containing: date, in: timeZone), at: coordinates)
     }
 
+    /// The sun's true altitude above the horizon in degrees, without refraction: 90 at the
+    /// zenith, negative below the horizon.
+    public static func altitude(at date: Date, coordinates: Coordinates) -> Double {
+        let julianDay = date.timeIntervalSince1970 / 86_400 + 2_440_587.5
+        let sun = sun(at: julianDay)
+        let utcMinutes = date.timeIntervalSince1970.truncatingRemainder(dividingBy: 86_400) / 60
+        let trueSolarMinutes = utcMinutes + sun.equationOfTime + 4 * coordinates.longitude
+        let hourAngle = radians(trueSolarMinutes / 4 - 180)
+        let latitude = radians(coordinates.latitude)
+        let declination = radians(sun.declination)
+        let sine = sin(latitude) * sin(declination) + cos(latitude) * cos(declination) * cos(hourAngle)
+        return degrees(asin(min(max(sine, -1), 1)))
+    }
+
     // MARK: - NOAA equations
 
     /// Declination in degrees and equation of time in minutes.
