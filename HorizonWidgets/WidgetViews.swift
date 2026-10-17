@@ -203,7 +203,8 @@ struct NextEventRectangularView: View {
                     .foregroundStyle(Theme.secondary)
             }
             .font(.system(size: 11, weight: .semibold, design: .rounded))
-            MiniArc(progress: snapshot.isNight ? nil : entry.progress, gradient: snapshot.gradient)
+            MiniArc(
+                progress: snapshot.isNight ? nil : entry.progress, path: snapshot.path, gradient: snapshot.gradient)
                 .frame(maxHeight: .infinity)
             HStack(alignment: .firstTextBaseline) {
                 Text([snapshot.name, snapshot.time].joined(separator: " "))
@@ -261,22 +262,26 @@ struct SunBar: View {
     }
 }
 
-/// The main screen's arc, reduced to a line and a dot.
+/// The main screen's arc, reduced to a line and a dot: the same real path of the sun.
 struct MiniArc: View {
     @Environment(\.layoutDirection) private var layoutDirection
     /// Daylight elapsed, or nil at night.
     let progress: Double?
+    let path: SunPath?
     let gradient: Gradient
 
     var body: some View {
         GeometryReader { proxy in
             let mirrored = layoutDirection == .rightToLeft
             let horizon = proxy.size.height - 3
-            let radiusX = proxy.size.width / 2 - 6
-            let radiusY = max(4, horizon - 4)
+            let left: CGFloat = 6
+            let span = proxy.size.width - 2 * left
+            let maxHeight = max(4, horizon - 4)
             let point: (Double) -> CGPoint = { fraction in
-                let x = proxy.size.width / 2 - radiusX * cos(.pi * fraction)
-                return CGPoint(x: mirrored ? proxy.size.width - x : x, y: horizon - radiusY * sin(.pi * fraction))
+                let sun = path?.point(atFraction: fraction)
+                    ?? SunPathPoint(x: fraction, height: 0.85 * sin(.pi * fraction))
+                let x = left + span * sun.x
+                return CGPoint(x: mirrored ? proxy.size.width - x : x, y: horizon - maxHeight * sun.height)
             }
             let arc: (Double, Double) -> Path = { start, end in
                 var path = Path()
