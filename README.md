@@ -28,7 +28,7 @@ The images in `docs/mockup/` are exported from the design source, a private Figm
 
 ## Requirements
 
-- Xcode 26 or later (Xcode 26 runs on Intel Macs), with the watchOS 26 simulator runtime (`xcodebuild -downloadPlatform watchOS`)
+- Xcode 26 or later, with the watchOS simulator runtime (`xcodebuild -downloadPlatform watchOS`). Xcode 26 runs on Intel Macs; Xcode 27, needed for a watch on watchOS 27, runs only on Apple silicon
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen) to regenerate the project (`brew install xcodegen`)
 - watchOS 26 deployment target, Swift 6 and SwiftUI
 - An Apple Watch for alarms, haptics and GPS (the simulator is enough for the UI)
@@ -84,7 +84,7 @@ The bundle identifiers are `fr.trendev.horizon` and `fr.trendev.horizon.widgets`
    Or in Xcode: choose the watch as the destination and press ⌘R. The first time, Xcode needs a few minutes to prepare the watch; until then it is listed with an error.
 6. **Trust.** If the watch refuses to open the app: on the iPhone, Settings > General > VPN & Device Management, trust your Apple account.
 
-A watch on a newer minor watchOS than Xcode's SDK has worked (watchOS 26.6 with Xcode 26.5). With a free account the app stops opening after 7 days: run the script again, settings are kept.
+A watch on a newer minor watchOS than Xcode's SDK has worked (watchOS 26.6 with Xcode 26.5). A newer major version has not: a watch on **watchOS 27 needs Xcode 27, which runs only on Apple silicon Macs**. With a free account the app stops opening after 7 days: run the script again, settings are kept.
 
 ## Layout
 

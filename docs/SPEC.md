@@ -142,17 +142,17 @@ Each part links to its image in [`mockup/`](mockup/). Times in examples are Pari
 ![Main screen](mockup/1-main-screen.png)
 
 - **Title bar**: "Horizon" and the time.
-- **Arc**: a half-ellipse above a horizon line. The left end is sunrise, the right end sunset (mirrored in right-to-left languages, see section 8). The part already travelled is drawn as a gradient (dawn orange to dusk pink), the rest dotted.
-- **Sun**: placed on the arc at the fraction of daylight already elapsed, `(now − sunrise) / (sunset − sunrise)`, with a soft glow.
+- **Arc**: the sun's real path that day, above a horizon line: time runs linearly from end to end and the height is the sun's true altitude on a fixed scale (70° at the top), so the arc is low in winter and high in summer. The left end is sunrise, the right end sunset (mirrored in right-to-left languages, see section 8). The part already travelled is drawn as a gradient (dawn orange to dusk pink), the rest dotted.
+- **Sun**: on the path at the current minute: across at the fraction of daylight already elapsed, `(now − sunrise) / (sunset − sunrise)`, up at its real altitude, with a soft glow.
 - **Two bells (nodes)** on the horizon, at the arc ends:
   - on: filled gradient bell, glow;
   - off: dark circle, crossed-out bell;
   - ring around it: armed as a persistent alarm.
   - **Tap** toggles the alarm, plays a `.click` haptic, shows a 2 s confirmation ("Sunrise alarm on — Every day, on its own") and replans the alarms.
-- **Countdown** inside the arc (see 5.2).
+- **Countdown** in a band above the arc (see 5.2). A real winter path is too low to hold it inside.
 - Under the horizon: day length ("11 h 46 of daylight"), then the sunrise and sunset labels and times.
-- **Bottom pill**: mode of the next alarm, "Persistent alarm", "Automatic alarm", or "Tap a bell" when both are off.
-- **Night view** (after sunset, until sunrise): dotted indigo arc, moon at the top, tomorrow's times, "Tomorrow · 11 h 43".
+- **Bottom pill**: mode of the next alarm, "Persistent alarm", "Automatic alarm", or "Tap a bell" when both are off. A small capsule sized to its text, centred, clear of the screen's rounded corners.
+- **Night view** (after sunset, until sunrise): the coming day's path dotted in indigo, the moon travelling along it from the sunset end to the sunrise end as the night passes, tomorrow's times, "Tomorrow · 11 h 43".
 - Page indicator on the right, next to the Digital Crown (3 pages).
 
 ### 5.2 Countdown
@@ -417,4 +417,6 @@ Points the first build (October 2026) settled or had to decide. The simulator wa
 8. **Polar day or night.** The bottom pill is hidden while alarms are on but nothing can be planned.
 9. **Seen in the simulator:** every screen of section 5 in English, plus the main screen in German, Dutch, Portuguese, Japanese and Arabic; the Smart Stack card and its tap; 59 pending notifications with the refill reminder. **Not yet seen anywhere:** haptics, the alarm session ringing in the background, the system alert's Stop and Open, Focus behaviour, corner, circular and inline complications on a watch face, the Control Center toggle, the Action button shortcut. They are the checklist of section 11.
 10. **Free Apple accounts.** A Personal Team cannot sign the Time Sensitive Notifications capability. `HorizonApp/HorizonPersonalTeam.entitlements` is a variant without it, chosen in `Configuration/Local.xcconfig`, for installing on one's own watch. In that build notifications are delivered at the normal level and a Focus can silence them. The store build keeps the capability.
+11. **The arc (5.1), revised in October 2026 after a week on a real Ultra 2.** The first build drew a half ellipse and placed the sun by angle, so its motion was not proportional to time, and the moon sat at the summit all night. The arc is now `SunPath`: the real altitude against linear time, checked against astral in `docs/fixtures/sun-altitudes.csv`. The countdown moved above the arc, and the bottom pill shrank: the full-width one was cut by the Ultra 2's corners. The mockup images in `docs/mockup/` still show the first design until the design file is updated.
+12. **watchOS 27.** Building with the watchOS 27 SDK, and installing on a watch running watchOS 27, need Xcode 27, which runs only on Apple silicon Macs. Xcode 26.5 cannot mount the watchOS 27 developer disk image. The app built with the watchOS 26 SDK needs no change to run on watchOS 27.
 
